@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  get 'simulations/index'
+
+  root to: 'simulations#index'
+          get '/simulations', to: 'simulations#index', as: "simulations"
+  
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
