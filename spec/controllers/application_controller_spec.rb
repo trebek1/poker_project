@@ -1,1 +1,1 @@
-application_controller.spec
+require "rails_helper"

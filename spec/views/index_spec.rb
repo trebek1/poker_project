@@ -1,1 +1,1 @@
-index.spec
+require "rails_helper"
