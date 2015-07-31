@@ -31,5 +31,26 @@ RSpec.describe SimulationsController do
 	  		end
   		end  
   		expect(@hands2.length).to equal 1000 # if hands 2 = 1000 hands 1 must also equal 1000
-  	end   	 
+  	end
+    it "should keep a numerical value and change the face card to a face card " do
+
+        @top1 = [5, 13]
+        @highcardwinner1 = []
+        
+        for i in 0..@top1.length-1 do 
+          if @top1[i] <= 10
+            @highcardwinner1[i] = @top1[i]
+          elsif @top1[i] == 11
+            @highcardwinner1[i] = 'J'
+          elsif @top1[i] == 12
+            @highcardwinner1[i] = 'Q'
+          elsif @top1[i] == 13
+            @highcardwinner1[i] = 'K'
+          elsif @top1[i] == 14
+            @highcardwinner1[i] = "A"
+          end 
+        end
+        expect(@highcardwinner1[0]).to eq 5
+        expect(@highcardwinner1[1]).to eq 'K'
+    end   	 
 end 

@@ -418,4 +418,13 @@ RSpec.describe SimulationsController do
     	end   
 	 expect(@actual[0]).to eq "A Royal Flush"
 	 end 	
+
+	 it "should keep the values of the original array saved after copy" do
+	 	@searchinfo = ['a', 'b', 'c']
+	 	@player1hands = @searchinfo.dup
+	 	@searchinfo = ['d']
+	 	expect(@player1hands).to eq ['a', 'b', 'c']
+	 	expect(@searchinfo).to eq ['d']
+	 end 
+
 end # end spec (controller)
