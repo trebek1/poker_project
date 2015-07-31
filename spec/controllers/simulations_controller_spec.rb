@@ -2,11 +2,6 @@ require "rails_helper"
 
 RSpec.describe SimulationsController do
 
-    it "renders the index template" do
-      get :index
-      expect(response).to render_template("index")
-    end
-
     it "loads 2000 hands of poker of length 10" do
     	data = File.read("poker.txt").gsub(/\s+/, "").scan(/.{10}/)
     	expect(data.length).to equal 2000
@@ -24,5 +19,17 @@ RSpec.describe SimulationsController do
      	@wins1 = 0
      	@wins1.should eql(0)
      end 
- 	
+ 	it "hands 1 and 2 should be half the size (1000) as the file" do 
+     	data = File.read("poker.txt").gsub(/\s+/, "").scan(/.{10}/)
+		@hands1 = Array.new
+		@hands2 = Array.new
+     	data.each_with_index do |data,index|
+	  		if index % 2 === 0 
+	  			@hands1.push(data)
+	  		else 
+	  			@hands2.push(data) 
+	  		end
+  		end  
+  		expect(@hands2.length).to equal 1000 # if hands 2 = 1000 hands 1 must also equal 1000
+  	end   	 
 end 

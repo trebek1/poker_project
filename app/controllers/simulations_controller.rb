@@ -25,5 +25,14 @@ class SimulationsController < ApplicationController
     @highcardwinner1 = Array.new 
     @highcardwinner2 = Array.new
 
+    data.each_with_index do |data,index|
+  		if index % 2 === 0 
+  			@hands1.push(data)
+  		else 
+  			@hands2.push(data) 
+  		end 
+  	end
+
+
   end
 end
