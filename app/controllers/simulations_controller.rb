@@ -31,8 +31,6 @@ class SimulationsController < ApplicationController
   		else 
   			@hands2.push(data) 
   		end 
-  	end
-
-
-  end
-end
+  	end # Ends loop to push players their hands 
+  end# ends lop for index definition
+end# ends class definition
