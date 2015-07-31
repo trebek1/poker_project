@@ -227,4 +227,110 @@ RSpec.describe SimulationsController do
 			expect(@info['straight']).to eq 1   
 		end 
 
+		it "should test for flush but not royal or straight" do 
+			@top = 0
+ 			@info = { 'D' => 5, '2' =>1, '4' =>3, 'pair'=> 0, 'Royal' => 0, 'sflush' => 0, 'flush' => 0}
+ 			
+ 			@info.each do |key,val|
+			
+				if @info[key] == 5 && (key == 'H' || key == 'S' || key = 'D' || key = 'C' )
+					# if those five cards are the highest five we have royal flush
+					if @info['K'] == 1 && @info['Q'] == 1 && @info['J'] == 1 && @info['A'] == 1 && @info['T'] == 1 
+					@info['Royal'] = 1
+					@top = 600
+					#if those 5 cards are not the highest, but are in order we have a straight flush 
+					elsif @info['A'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 ||
+						  @info['6'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+						  @info['6'] == 1 && @info['7'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+						  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+						  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['5'] ==1 || 
+						  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+						  @info['J'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+						  @info['J'] == 1 && @info['Q'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+						  @info['J'] == 1 && @info['Q'] == 1 && @info['K'] == 1 && @info['9'] == 1 && @info['T'] ==1
+					@info['sflush'] = 1	
+					@top = 500
+					else 
+					#if the cards are just the same color but not in order we have a regular flush 
+					@info['flush'] = 1 
+					@top = 200		 
+					end	
+				end 	
+			end # ends loop for object 
+			expect(@info['flush']).to eq 1
+			expect(@top).to eq 200 
+			expect(@info['Royal']).to_not eq 1
+			expect(@info['sflush']).to_not eq 1 
+		end 
+		it "should test for straigh flush but not royal or regular flush" do 
+			@top = 0
+ 			@info = { 'D' => 5, '2' =>1, '3' =>1, '4'=> 1, '5' => 1, '6' => 1, 'Royal' => 0, 'sflush' => 0, 'flush' => 0}
+ 			
+ 			@info.each do |key,val|
+			
+				if @info[key] == 5 && (key == 'H' || key == 'S' || key = 'D' || key = 'C' )
+					# if those five cards are the highest five we have royal flush
+					if @info['K'] == 1 && @info['Q'] == 1 && @info['J'] == 1 && @info['A'] == 1 && @info['T'] == 1 
+					@info['Royal'] = 1
+					@top = 600
+					#if those 5 cards are not the highest, but are in order we have a straight flush 
+					elsif @info['A'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 ||
+						  @info['6'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+						  @info['6'] == 1 && @info['7'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+						  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+						  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['5'] ==1 || 
+						  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+						  @info['J'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+						  @info['J'] == 1 && @info['Q'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+						  @info['J'] == 1 && @info['Q'] == 1 && @info['K'] == 1 && @info['9'] == 1 && @info['T'] ==1
+					@info['sflush'] = 1	
+					@top = 500
+					else 
+					#if the cards are just the same color but not in order we have a regular flush 
+					@info['flush'] = 1 
+					@top = 200		 
+					end	
+				end 	
+			end # ends loop for object 
+			expect(@info['sflush']).to eq 1
+			expect(@top).to eq 500 
+			expect(@info['Royal']).to_not eq 1
+			expect(@info['flush']).to_not eq 1 
+		end 
+
+		it "should test for royal flush but not straight or regular flush" do 
+			@top = 0
+ 			@info = { 'D' => 5, 'T' =>1, 'J' =>1, 'Q'=> 1, 'K' => 1, 'A' => 1, 'Royal' => 0, 'sflush' => 0, 'flush' => 0}
+ 			
+ 			@info.each do |key,val|
+			
+				if @info[key] == 5 && (key == 'H' || key == 'S' || key = 'D' || key = 'C' )
+					# if those five cards are the highest five we have royal flush
+					if @info['K'] == 1 && @info['Q'] == 1 && @info['J'] == 1 && @info['A'] == 1 && @info['T'] == 1 
+					@info['Royal'] = 1
+					@top = 600
+					#if those 5 cards are not the highest, but are in order we have a straight flush 
+					elsif @info['A'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 ||
+						  @info['6'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+						  @info['6'] == 1 && @info['7'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+						  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+						  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['5'] ==1 || 
+						  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+						  @info['J'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+						  @info['J'] == 1 && @info['Q'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+						  @info['J'] == 1 && @info['Q'] == 1 && @info['K'] == 1 && @info['9'] == 1 && @info['T'] ==1
+					@info['sflush'] = 1	
+					@top = 500
+					else 
+					#if the cards are just the same color but not in order we have a regular flush 
+					@info['flush'] = 1 
+					@top = 200		 
+					end	
+				end 	
+			end # ends loop for object 
+			expect(@info['Royal']).to eq 1
+			expect(@top).to eq 600 
+			expect(@info['sflush']).to_not eq 1
+			expect(@info['flush']).to_not eq 1 
+		end 
 end # end spec (controller)
