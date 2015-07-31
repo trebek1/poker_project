@@ -362,5 +362,7 @@ RSpec.describe SimulationsController do
 		end
 		expect(@info['house']).to eq 1 
 		expect(@top).to eq 300
-	end  	
+	end 
+
+	 	
 end # end spec (controller)

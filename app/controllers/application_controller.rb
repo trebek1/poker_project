@@ -51,7 +51,99 @@ def hand_results (hand,index,player)
 			if char == 9
 				@info['max'] = max
 			end
+			
 		end
+		# initialize combos in object for given hand 
+		@info['pair']  = 0   # make value = 20 
+		@info['3kind'] = 0   # make value = 50
+		@info['straight'] = 0 # make value = 100
+		@info['flush'] = 0   # make value = 200 
+		@info['house'] = 0 # make value = 300
+		@info['4kind'] = 0 # make value = 400
+		@info['sflush'] = 0 # make value = 500
+		@info['Royal'] = 0 # make value = 600
+
+		# initialize max to save the best combination from the hand 
+		@top = 0
+		# initialize variable to save the name for the winning hand 
+		@actual = []
+		# test for whether or not the hand has a combo 
+		@info.each do |key,val|
+			# since we are only looking at the key once we could have either a pair or 3 of a kind 
+			if @info[key] ==2 || @info[key] == 3
+				# if 3 of a kind, we dont want to test for pair so we look for 3kind first 
+				if @info[key] == 3 && key != 'H' && key != 'S' && key != 'D' && key != 'C' && key != 'max' && key != 'pair'
+					@info['3kind'] =1
+					# see if 3kind is best hand, if so make max value 
+					if @top < 50
+						@top = 50
+					end 
+					# test for pair if not a 3 of a kind 
+				elsif @info[key] == 2 && key != 'H' && key != 'C' && key != 'max' && key != 'S' && key != 'D' && key != 'pair'
+					@info['pair'] +=1
+					# see if pair is best hand, if so, set max to value 
+					if @top < 20* @info['pair']
+						@top = 20*@info['pair']
+					end 
+				end
+			end 
+			# find 4 of a kind without triggering 4 of a kind on a suit count
+			if @info[key] ==4 && key!= 'H' && key!= 'S' && key!='D' && key!='C' && key!= 'max' 
+				@info['4kind'] = 1
+				@top = 400 
+			end
+			
+			# if all five cards are in a row we have a straight 
+			
+			if 		  @info['A'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 ||
+					  @info['6'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+					  @info['6'] == 1 && @info['7'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+					  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+					  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['5'] ==1 || 
+					  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+					  @info['J'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+					  @info['J'] == 1 && @info['Q'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+					  @info['J'] == 1 && @info['Q'] == 1 && @info['K'] == 1 && @info['9'] == 1 && @info['T'] ==1
+				@info['straight'] =1
+				@top = 100 	
+			end
+
+			#if all five cards are one suit we have a flush 
+			if @info[key] == 5 && (key == 'H' || key == 'S' || key = 'D' || key = 'C' )
+				# if those five cards are the highest five we have royal flush
+				if @info['K'] == 1 && @info['Q'] == 1 && @info['J'] == 1 && @info['A'] == 1 && @info['T'] == 1 
+				@info['Royal'] = 1
+				@top = 600
+				#if those 5 cards are not the highest, but are in order we have a straight flush 
+				elsif @info['A'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 ||
+					  @info['6'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+					  @info['6'] == 1 && @info['7'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+					  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+					  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['5'] ==1 || 
+					  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+					  @info['J'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+					  @info['J'] == 1 && @info['Q'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+					  @info['J'] == 1 && @info['Q'] == 1 && @info['K'] == 1 && @info['9'] == 1 && @info['T'] ==1
+				@info['sflush'] = 1	
+				@top = 500
+				else 
+				#if the cards are just the same color but not in order we have a regular flush 
+				@info['flush'] = 1 
+				@top = 200		 
+				end	
+			end 	
+			# if we have both a 3 of a kind and a pair we have a full house 
+			if @info['3kind'] == 1 && @info['pair'] == 1
+			   @info['house'] = 1
+			   @top = 300
+			end 	
+		end
+
+		# add hand outcomes to @eachinfo at the index position in the array 
+		if @info['max'] > @top
+			@top = @info['max']
+		end 
+
 	end 
   protect_from_forgery with: :exception
 end
