@@ -364,5 +364,58 @@ RSpec.describe SimulationsController do
 		expect(@top).to eq 300
 	end 
 
-	 	
+	 it "should push High Card to actual array" do 
+	 	@actual = [] 
+	 	@top = 9
+
+	 	if @top < 20
+    		@actual.push("High Card")
+    	elsif @top == 20
+    		@actual.push("A Pair")
+    	elsif @top == 40
+    		@actual.push("Two Pair")
+    	elsif @top == 50
+    		@actual.push("Three of a Kind")
+    	elsif @top == 100
+    		@actual.push("A Straight")
+    	elsif @top == 200 
+    		@actual.push("A Flush")
+    	elsif @top == 300
+    		@actual.push("A Full House")
+    	elsif @top == 400 
+    		@actual.push("Four of a Kind")
+    	elsif @top == 500 
+    		@actual.push("A Straight Flush")
+    	else 
+    		@actual.push("A Royal flush")
+    	end   
+	 expect(@actual[0]).to eq "High Card"
+	 end 	
+	  it "should push Royal Flush to actual array" do 
+	 	@actual = [] 
+	 	@top = 600
+
+	 	if @top < 20
+    		@actual.push("High Card")
+    	elsif @top == 20
+    		@actual.push("A Pair")
+    	elsif @top == 40
+    		@actual.push("Two Pair")
+    	elsif @top == 50
+    		@actual.push("Three of a Kind")
+    	elsif @top == 100
+    		@actual.push("A Straight")
+    	elsif @top == 200 
+    		@actual.push("A Flush")
+    	elsif @top == 300
+    		@actual.push("A Full House")
+    	elsif @top == 400 
+    		@actual.push("Four of a Kind")
+    	elsif @top == 500 
+    		@actual.push("A Straight Flush")
+    	else 
+    		@actual.push("A Royal Flush")
+    	end   
+	 expect(@actual[0]).to eq "A Royal Flush"
+	 end 	
 end # end spec (controller)
