@@ -116,8 +116,6 @@ RSpec.describe SimulationsController do
 
  	it " should test positive for a pair (and ignore the suits) and set value equal to 20" do 
 	 	@top = 0
-	 	@info = {}
-	 	@info['pair'] = 0
  		@info = {'H' => 2, 'S' => 2, 'D' => 2, 'C' => 2, '4' =>2, 'pair'=> 0}
  		@info.each do |key,val|
 		 	if @info[key] ==2 || @info[key] == 3
@@ -144,8 +142,6 @@ RSpec.describe SimulationsController do
 
 	it " should test positive for 2 pair (and ignore the suits) and set value equal to 40" do 
 	 	@top = 0
-	 	@info = {}
-	 	@info['pair'] = 0
  		@info = {'H' => 2, 'S' => 2, 'D' => 2, 'C' => 2, '4' =>2, '7' =>2, 'pair'=> 0}
  		@info.each do |key,val|
 		 	if @info[key] ==2 || @info[key] == 3
@@ -172,8 +168,6 @@ RSpec.describe SimulationsController do
 
 	it " should test positive for a 3 of a kind and set value equal to 50" do 
 	 	@top = 0
-	 	@info = {}
-	 	@info['3kind'] = 0
  		@info = {'H' => 2, 'S' => 2, 'D' => 2, 'C' => 2, '4' =>3, 'pair'=> 0, '3kind' => 0}
  		@info.each do |key,val|
 		 	if @info[key] ==2 || @info[key] == 3
@@ -201,7 +195,6 @@ RSpec.describe SimulationsController do
 	it "should test four of a kind (4kind =1 ) and set value to 400 also make sure pair is not being triggered twice" do 
 		
 		@top = 0
-	 	@info = {}
  		@info = {'H' => 2, 'S' => 2, 'D' => 2, 'C' => 2, '4' =>4, 'pair'=> 0, '3kind' => 0, '4kind' => 0}
 		@info.each do |key,val|
 			if @info[key] ==4 && key!= 'H' && key!= 'S' && key!='D' && key!='C' && key!= 'max' 
@@ -213,6 +206,25 @@ RSpec.describe SimulationsController do
 			expect(@info['4kind']).to eq 1
 			expect(@info['pair']).not_to eq 2 
 	end 
-
+		it "Should test that straight is triggered for a straight and assign a value of 100" do 
+			@top = 0
+	 		@info = {'A' => 1, '2' => 1, '3' => 1, '4' => 1, '5' =>1, 'pair'=> 0, '3kind' => 0, '4kind' => 0, 'straight' => 0}
+			
+	 			if    @info['A'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1
+					  @info['6'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+					  @info['6'] == 1 && @info['7'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+					  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
+					  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['5'] ==1 || 
+					  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+					  @info['J'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+					  @info['J'] == 1 && @info['Q'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
+					  @info['J'] == 1 && @info['Q'] == 1 && @info['K'] == 1 && @info['9'] == 1 && @info['T'] ==1
+				@info['straight'] =1
+				@top = 100 	
+				end
+			
+			expect(@top).to eq 100
+			expect(@info['straight']).to eq 1   
+		end 
 
 end # end spec (controller)
