@@ -142,5 +142,61 @@ RSpec.describe SimulationsController do
 		expect(@info['pair']).to eql 1
 	end 
 
+	it " should test positive for 2 pair (and ignore the suits) and set value equal to 40" do 
+	 	@top = 0
+	 	@info = {}
+	 	@info['pair'] = 0
+ 		@info = {'H' => 2, 'S' => 2, 'D' => 2, 'C' => 2, '4' =>2, '7' =>2, 'pair'=> 0}
+ 		@info.each do |key,val|
+		 	if @info[key] ==2 || @info[key] == 3
+				# if 3 of a kind, we dont want to test for pair so we look for 3kind first 
+				if @info[key] == 3 && key != 'H' && key != 'S' && key != 'D' && key != 'C' && key != 'max' && key != 'pair'
+					@info['3kind'] =1
+					# see if 3kind is best hand, if so make max value 
+					if @top < 50
+						@top = 50
+					end 
+					# test for pair if not a 3 of a kind 
+				elsif @info[key] == 2 && key != 'H' && key != 'C' && key != 'max' && key != 'S' && key != 'D' && key != 'pair'
+					@info['pair'] +=1
+					# see if pair is best hand, if so, set max to value 
+					if @top < 20* @info['pair']
+						@top = 20*@info['pair']
+					end 
+				end	 
+			end 
+		end 
+		expect(@top).to eql 40
+		expect(@info['pair']).to eql 2
+	end 
+
+	it " should test positive for a 3 of a kind and set value equal to 50" do 
+	 	@top = 0
+	 	@info = {}
+	 	@info['3kind'] = 0
+ 		@info = {'H' => 2, 'S' => 2, 'D' => 2, 'C' => 2, '4' =>3, 'pair'=> 0, '3kind' => 0}
+ 		@info.each do |key,val|
+		 	if @info[key] ==2 || @info[key] == 3
+				# if 3 of a kind, we dont want to test for pair so we look for 3kind first 
+				if @info[key] == 3 && key != 'H' && key != 'S' && key != 'D' && key != 'C' && key != 'max' && key != 'pair'
+					@info['3kind'] =1
+					# see if 3kind is best hand, if so make max value 
+					if @top < 50
+						@top = 50
+					end 
+					# test for pair if not a 3 of a kind 
+				elsif @info[key] == 2 && key != 'H' && key != 'C' && key != 'max' && key != 'S' && key != 'D' && key != 'pair'
+					@info['pair'] +=1
+					# see if pair is best hand, if so, set max to value 
+					if @top < 20* @info['pair']
+						@top = 20*@info['pair']
+					end 
+				end	 
+			end 
+		end 
+		expect(@top).to eql 50
+		expect(@info['3kind']).to eql 1
+	end 
+
 
 end # end spec (controller)
