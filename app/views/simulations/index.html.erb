@@ -1,3 +1,76 @@
-<h1>Simulations#index</h1>
-<p>Find me in app/views/simulations/index.html.erb</p>
-<div> <%= @data %> </div>
+<h1>One Thousand Hands of Poker</h1>
+
+<div class = "row">
+	<div class = "col-xs-3" style="background-color: HoneyDew; margin: 20px ">
+	
+	<% for i in 0..@hands1.length-1 do %>
+		<br>
+		<div> This is round <%= i+1 %> </div>
+		<br>
+
+		Player 1's Hand is <%=@hands1[i][0] + @hands1[i][1] + "," + @hands1[i][2] + @hands1[i][3] + "," + @hands1[i][4] + @hands1[i][5] + "," + @hands1[i][6] + @hands1[i][7] + ","+ @hands1[i][8] + @hands1[i][9] %> <br>
+		Player 2's Hand is <%=@hands2[i][0] + @hands2[i][1] + "," + @hands2[i][2] + @hands2[i][3] + "," + @hands2[i][4] + @hands2[i][5] + "," + @hands2[i][6] + @hands2[i][7] + ","+ @hands2[i][8] + @hands2[i][9] %> <br>
+
+		<% if @top1[i] > @top2[i] %>
+			<% if @wins1 == 0 %>
+				<div>Player 1 is the winner with <%=@best1[i][0]%> </div>
+				<% if @best1[i][0] == 'High Card' %>
+					<div> The high card is <%= @highcardwinner1[i] %>
+				<% end %>
+				<% @wins1+=1 %> 
+				<% if @wins2 == 1 %>
+					<div>Player 1 has <%=@wins1%> win  </div>				
+					<div>Player 2 has <%=@wins2%> win  </div>
+				<% else %>
+					<div>Player 1 has <%=@wins1%> win  </div>				
+					<div>Player 2 has <%=@wins2%> wins  </div>
+				<% end %>
+			<% else %>
+				 <% @wins1+=1 %> 
+				 <div>Player 1 is the winner with <%=@best1[i][0]%> </div> 
+				 <% if @best1[i][0] == 'High Card' %>
+					<div> The high card is <%= @highcardwinner1[i] %>
+				 <% end %>
+				 <% if @wins2 == 1 %>
+					 <div>Player 1 has <%=@wins1%> wins  </div>
+					 <div>Player 2 has <%=@wins2%> win  </div>
+				 <% else %>
+					 <div>Player 1 has <%=@wins1%> wins  </div>
+					 <div>Player 2 has <%=@wins2%> wins  </div>
+				<% end %>
+			<%end%> 
+		<% else %> 
+		<% if @wins2 == 0 %>
+				<div>Player 2 is the winner with <%=@best2[i][0]%> </div>
+				<% if @best2[i][0] == 'High Card' %>
+					<div> The high card is <%= @highcardwinner2[i] %>
+				<% end %>
+				<% @wins2+=1 %> 
+				<% if @wins1 == 1 %> 
+					<div>Player 1 has <%=@wins1%> win  </div>
+					<div>Player 2 has <%=@wins2%> win  </div>
+				<% else %>
+					<div>Player 1 has <%=@wins1%> wins  </div>
+					<div>Player 2 has <%=@wins2%> win  </div>
+				<%end%>
+			<% else %>
+				 <% @wins2+=1 %> 
+				 <div>Player 2 is the winner with <%=@best2[i][0]%> </div>
+				 <% if @best2[i][0] == 'High Card' %>
+					<div> The high card is <%= @highcardwinner2[i] %>
+				 <% end %>
+				 <% if @wins1 == 1 %> 
+					<div>Player 1 has <%=@wins1%> win  </div>
+					<div>Player 2 has <%=@wins2%> wins  </div>
+				<% else %>
+					<div>Player 1 has <%=@wins1%> wins  </div>
+					<div>Player 2 has <%=@wins2%> wins  </div>
+				<%end%>
+			<%end%>
+		<%end%>
+	<%end%> 
+	</div>
+</div>
+
+
+
