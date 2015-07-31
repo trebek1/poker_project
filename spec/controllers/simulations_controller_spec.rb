@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe SimulationsController do
 
-    it "loads 2000 hands of poker of length 10" do
+  it "loads 2000 hands of poker of length 10" do
     	data = File.read("poker.txt").gsub(/\s+/, "").scan(/.{10}/)
     	expect(data.length).to equal 2000
     end 	

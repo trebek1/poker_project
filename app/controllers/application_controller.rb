@@ -3,9 +3,9 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
  
 
-def hand_results (hand,index,player)
-	
-		max=0
+	def hand_results (hand,index,player)
+		
+		max=0 # Set the max value to zero in order to help find the high card for the hand 
 		hand.chars.each_with_index do |card, char|
 			# Go through each card and add to a hash for analysis 
 			if  	@info[card] == nil
@@ -45,13 +45,11 @@ def hand_results (hand,index,player)
 						max = value 
 					end 
 				end
-				
 			end
 			#After the last card, push max to the array 
 			if char == 9
 				@info['max'] = max
-			end
-			
+			end		
 		end
 		# initialize combos in object for given hand 
 		@info['pair']  = 0   # make value = 20 
@@ -138,45 +136,41 @@ def hand_results (hand,index,player)
 			   @top = 300
 			end 	
 		end
-
 		# add hand outcomes to @eachinfo at the index position in the array 
 		if @info['max'] > @top
 			@top = @info['max']
 		end 
-	# calculate the actual name for the winning hand from numerical value 
-
-	    	if @top < 20
-	    		@actual.push("High Card")
-	    	elsif @top == 20
-	    		@actual.push("A Pair")
-	    	elsif @top == 40
-	    		@actual.push("Two Pair")
-	    	elsif @top == 50
-	    		@actual.push("Three of a Kind")
-	    	elsif @top == 100
-	    		@actual.push("A Straight")
-	    	elsif @top == 200 
-	    		@actual.push("A Flush")
-	    	elsif @top == 300
-	    		@actual.push("A Full House")
-	    	elsif @top == 400 
-	    		@actual.push("Four of a Kind")
-	    	elsif @top == 500 
-	    		@actual.push("A Straight Flush")
-	    	else 
-	    		@actual.push("A Royal Flush")
-	    	end 
+		# calculate the actual name for the winning hand from numerical value 
+		if @top < 20
+			@actual.push("High Card")
+		elsif @top == 20
+			@actual.push("A Pair")
+		elsif @top == 40
+			@actual.push("Two Pair")
+		elsif @top == 50
+			@actual.push("Three of a Kind")
+		elsif @top == 100
+			@actual.push("A Straight")
+		elsif @top == 200 
+			@actual.push("A Flush")
+		elsif @top == 300
+			@actual.push("A Full House")
+		elsif @top == 400 
+			@actual.push("Four of a Kind")
+		elsif @top == 500 
+			@actual.push("A Straight Flush")
+		else 
+			@actual.push("A Royal Flush")
+		end 
 
 	    # save the info to the index of the array of hands 
 		@eachinfo[index] = @info
-		
-		
+			
 		if player == 1
 			# objects passe by reference while numbers are not 
 			@player1hands = @eachinfo.dup
 			@top1[index] = @top
 			@best1[index] = @actual.dup
-
 		elsif player == 2  
 			@player2hands = @eachinfo.dup
 			@top2[index] = @top

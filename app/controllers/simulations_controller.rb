@@ -22,9 +22,11 @@ class SimulationsController < ApplicationController
     @wins1 = 0
     @wins2 = 0
 
+    # Stores the high card name instead of the number for numbers > 9 
     @highcardwinner1 = Array.new 
     @highcardwinner2 = Array.new
 
+    # Splits the hands between player 1 and 2 
     @data.each_with_index do |data,index|
   		if index % 2 === 0 
   			@hands1.push(data)
@@ -32,14 +34,16 @@ class SimulationsController < ApplicationController
   			@hands2.push(data) 
   		end 
   	end # Ends loop to push players their hands 
+   
    # Evaluate player 1
     @hands1.each_with_index do |hand,index|
-    hand_results(hand,index,1)      
+      hand_results(hand,index,1)      
     end 
     # Evaluate player 2 
     @hands2.each_with_index do |hand,index|
       hand_results(hand,index,2)  
     end 
+    
     # find high card winner card from numerical representation
     for i in 0..@top1.length-1 do 
       if @top1[i] <= 10
