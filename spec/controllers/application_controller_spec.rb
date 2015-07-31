@@ -198,5 +198,21 @@ RSpec.describe SimulationsController do
 		expect(@info['3kind']).to eql 1
 	end 
 
+	it "should test four of a kind (4kind =1 ) and set value to 400 also make sure pair is not being triggered twice" do 
+		
+		@top = 0
+	 	@info = {}
+ 		@info = {'H' => 2, 'S' => 2, 'D' => 2, 'C' => 2, '4' =>4, 'pair'=> 0, '3kind' => 0, '4kind' => 0}
+		@info.each do |key,val|
+			if @info[key] ==4 && key!= 'H' && key!= 'S' && key!='D' && key!='C' && key!= 'max' 
+						@info['4kind'] = 1
+						@top = 400 
+			end
+		end
+			expect(@top).to eql 400
+			expect(@info['4kind']).to eq 1
+			expect(@info['pair']).not_to eq 2 
+	end 
+
 
 end # end spec (controller)
