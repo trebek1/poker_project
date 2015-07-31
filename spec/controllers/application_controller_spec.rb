@@ -333,4 +333,34 @@ RSpec.describe SimulationsController do
 			expect(@info['sflush']).to_not eq 1
 			expect(@info['flush']).to_not eq 1 
 		end 
+		it "should result as full house and not 3kind or pair " do 
+			@top = 0
+ 			@info = { '3' => 5, 'H' => 2, 'A' =>3, 'J' =>2, 'Royal' => 0, 'sflush' => 0, 'flush' => 0, 'house' => 0, '3kind' =>0, 'pair' => 0}
+		# if we have both a 3 of a kind and a pair we have a full house
+		 @info.each do |key,val|
+		 	if @info[key] ==2 || @info[key] == 3
+				# if 3 of a kind, we dont want to test for pair so we look for 3kind first 
+				if @info[key] == 3 && key != 'H' && key != 'S' && key != 'D' && key != 'C' && key != 'max' && key != 'pair'
+					@info['3kind'] =1
+					# see if 3kind is best hand, if so make max value 
+					if @top < 50
+						@top = 50
+					end 
+					# test for pair if not a 3 of a kind 
+				elsif @info[key] == 2 && key != 'H' && key != 'C' && key != 'max' && key != 'S' && key != 'D' && key != 'pair'
+					@info['pair'] +=1
+					# see if pair is best hand, if so, set max to value 
+					if @top < 20* @info['pair']
+						@top = 20*@info['pair']
+					end 
+				end	 
+			end 
+		end 
+		if @info['3kind'] == 1 && @info['pair'] == 1
+		   @info['house'] = 1
+		   @top = 300
+		end
+		expect(@info['house']).to eq 1 
+		expect(@top).to eq 300
+	end  	
 end # end spec (controller)
