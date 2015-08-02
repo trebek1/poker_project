@@ -3,14 +3,10 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
  
   	# note that each time the function runs, we are only looking at one hand, with one index and one player 
-  	class Array
-	  def mode # Mode defined for use in calculations regarding combinations 
-	    sort_by {|i| grep(i).length }.last
-	  end
-	end
+  	
 
 	def hand_results (hand,index,player)
-		
+	
 		max=0 # Set the max value to zero in order to help find the high card for the hand 
 
 		# create an array to store the values of each card in a hand 
