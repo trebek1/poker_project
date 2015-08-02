@@ -626,7 +626,179 @@ RSpec.describe SimulationsController do
 		expect(@tie1[1]).to eq 3  
 	end 
 
+	it "Should result in the straight flush with the higher high card winning " do
 
+		@tie1 = Array.new
+		@tie2 = Array.new 
+
+		@top1 = [500] # A pair is a value of 20 
+		@top2 = [500]
+		@best1 = ["A Straight Flush","A Straight Flush"] 
+		@player1hands = [{'vals' => [5,6,7,8,9,10]}]
+		@player2hands = [{'vals' => [6,7,8,9,10,11]}]
+		for i in 0..@top1.length-1 do 
+			if @best1[i] == "A Straight Flush" # This line has been modified for testing purposes
+				if @player1hands[i]['vals'].sort[-1] > @player2hands[i]['vals'].sort[-1]
+					@tie1[i] = @player1hands[i]['vals'].sort[-1]
+					@tie2[i] = 0 
+				elsif @player1hands[i]['vals'].sort[-1] < @player2hands[i]['vals'].sort[-1]
+					@tie1[i] = 0
+					@tie2[i] = @player2hands[i]['vals'].sort[-1]
+				end 
+			end
+		end
+		expect(@tie2[0]).to eq 11 
+		expect(@tie1[0]).to eq 0   
+	end 
+
+	it "Should result in the higher four of a kind winning " do
+
+	class Array
+	  def mode
+	    sort_by {|i| grep(i).length }.last
+	  end
+	end
+
+		@tie1 = Array.new
+		@tie2 = Array.new 
+
+		@top1 = [400] # A pair is a value of 20 
+		@top2 = [400]
+		@best1 = ["Four of a Kind","Four of a Kind"] 
+		@player1hands = [{'vals' => [5,5,5,5,5,10]}]
+		@player2hands = [{'vals' => [4,4,4,4,4,11]}]
+		for i in 0..@top1.length-1 do 
+			if @best1[i] == "Four of a Kind" # This line has been modified for testing purposes
+				if @player1hands[i]['vals'].mode > @player2hands[i]['vals'].mode
+					@tie1[i] = @player1hands[i]['vals'].mode
+					@tie2[i] = 0 
+				elsif @player1hands[i]['vals'].mode < @player2hands[i]['vals'].mode
+					@tie1[i] = 0
+					@tie2[i] = @player2hands[i]['vals'].mode
+				end 
+			end
+		end
+		expect(@tie2[0]).to eq 0 
+		expect(@tie1[0]).to eq 5   
+	end 
+
+	it "Should result in the higher 3 of a kind winning " do
+		
+	class Array
+	  def mode
+	    sort_by {|i| grep(i).length }.last
+	  end
+	end
+
+		@tie1 = Array.new
+		@tie2 = Array.new 
+
+		@top1 = [50] # A pair is a value of 20 
+		@top2 = [50]
+
+		@best1 = ["Three of a Kind"] 
+		@player1hands = [{'vals' => [5,5,5,5,3,10]}]
+		@player2hands = [{'vals' => [4,4,4,4,3,11]}]
+		for i in 0..@top1.length-1 do 
+			if @best1[i] == "Three of a Kind" # This line has been modified for testing purposes
+				if @player1hands[i]['vals'].mode > @player2hands[i]['vals'].mode
+					@tie1[i] = @player1hands[i]['vals'].mode
+					@tie2[i] = 0 
+				elsif @player1hands[i]['vals'].mode < @player2hands[i]['vals'].mode
+					@tie1[i] = 0
+					@tie2[i] = @player2hands[i]['vals'].mode
+				end 
+			end
+		end
+		expect(@tie2[0]).to eq 0 
+		expect(@tie1[0]).to eq 5   
+	end 
+
+it "Should result in the higher full house winning" do
+		
+	class Array
+	  def mode
+	    sort_by {|i| grep(i).length }.last
+	  end
+	end
+
+		@tie1 = Array.new
+		@tie2 = Array.new 
+
+		@top1 = [300] # A pair is a value of 20 
+		@top2 = [300]
+		
+		@best1 = ["Full House"] 
+		@player1hands = [{'vals' => [5,5,5,5,3,3]}]
+		@player2hands = [{'vals' => [4,4,4,4,2,2]}]
+		for i in 0..@top1.length-1 do 
+			if @best1[i] == "Full House" # This line has been modified for testing purposes
+				if @player1hands[i]['vals'].mode > @player2hands[i]['vals'].mode
+					@tie1[i] = @player1hands[i]['vals'].mode
+					@tie2[i] = 0 
+				elsif @player1hands[i]['vals'].mode < @player2hands[i]['vals'].mode
+					@tie1[i] = 0
+					@tie2[i] = @player2hands[i]['vals'].mode
+				end 
+			end
+		end
+		expect(@tie2[0]).to eq 0 
+		expect(@tie1[0]).to eq 5   
+	end 
+
+it "Should result in the higher straight winning" do
+		
+
+		@tie1 = Array.new
+		@tie2 = Array.new 
+
+		@top1 = [100] # A pair is a value of 20 
+		@top2 = [100]
+		
+		@best1 = ["A Straight"] 
+		@player1hands = [{'vals' => [2,3,4,5,6,7], 'max' => 7}]
+		@player2hands = [{'vals' => [3,4,5,6,7,8], 'max' => 8}]
+		for i in 0..@top1.length-1 do 
+			if @best1[i] == "A Straight" # This line has been modified for testing purposes
+				if @player1hands[i]['max'] > @player2hands[i]['max']
+					@tie1[i] = @player1hands[i]['vals']['max']
+					@tie2[i] = 0 
+				elsif @player1hands[i]['max'] < @player2hands[i]['max']
+					@tie1[i] = 0
+					@tie2[i] = @player2hands[i]['max']
+				end 
+			end
+		end
+		expect(@tie2[0]).to eq 8 
+		expect(@tie1[0]).to eq 0   
+	end 
+
+it "Should result in the higher flush winning" do
+		
+
+		@tie1 = Array.new
+		@tie2 = Array.new 
+
+		@top1 = [200] # A pair is a value of 20 
+		@top2 = [200]
+		
+		@best1 = ["A Flush"] 
+		@player1hands = [{'vals' => [2,3,4,5,6,7], 'max' => 7, 'D' => 5}]
+		@player2hands = [{'vals' => [3,4,5,6,7,8], 'max' => 8, 'D' => 5}]
+		for i in 0..@top1.length-1 do 
+			if @best1[i] == "A Flush" # This line has been modified for testing purposes
+				if @player1hands[i]['max'] > @player2hands[i]['max']
+					@tie1[i] = @player1hands[i]['vals']['max']
+					@tie2[i] = 0 
+				elsif @player1hands[i]['max'] < @player2hands[i]['max']
+					@tie1[i] = 0
+					@tie2[i] = @player2hands[i]['max']
+				end 
+			end
+		end
+		expect(@tie2[0]).to eq 8 
+		expect(@tie1[0]).to eq 0   
+	end 
 
 
 end # end spec (controller)

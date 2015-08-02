@@ -5,23 +5,22 @@
 	<% for i in 0..@hands1.length-1 do %>
 		<br>
 		<div> This is round <%= i+1 %> </div>
-		<br>
+		<!-- <br>
 		<div>P1 <%= @player1hands[i] %> </div>
 		<br> 
-		<div>P2 <%= @player2hands[i] %> </div>
+		<div>P2 <%= @player2hands[i] %> </div> -->
 		<br>
 		Player 1's Hand is <%=@hands1[i][0] + @hands1[i][1] + "," + @hands1[i][2] + @hands1[i][3] + "," + @hands1[i][4] + @hands1[i][5] + "," + @hands1[i][6] + @hands1[i][7] + ","+ @hands1[i][8] + @hands1[i][9] %> <br>
 		Player 2's Hand is <%=@hands2[i][0] + @hands2[i][1] + "," + @hands2[i][2] + @hands2[i][3] + "," + @hands2[i][4] + @hands2[i][5] + "," + @hands2[i][6] + @hands2[i][7] + ","+ @hands2[i][8] + @hands2[i][9] %> <br>
 		<br> 
 
 		<% if @top1[i] > @top2[i] %>
+			<% @wins1+=1 %> 
 			<% if @wins1 == 0 %>
 				<div>Player 1 is the winner with <%=@best1[i][0]%> </div>
 				<% if @best1[i][0] == 'High Card' %>
 					<div> The high card is <%= @highcardwinner1[i] %>
-
 				<% end %>
-				<% @wins1+=1 %> 
 				<% if @wins2 == 1 %>
 					<div>Player 1 has <%=@wins1%> win  </div>				
 					<div>Player 2 has <%=@wins2%> win  </div>
@@ -29,8 +28,7 @@
 					<div>Player 1 has <%=@wins1%> win  </div>				
 					<div>Player 2 has <%=@wins2%> wins  </div>
 				<% end %>
-			<% else %>
-				 <% @wins1+=1 %> 
+			<% else %> 
 				 <div>Player 1 is the winner with <%=@best1[i][0]%> </div> 
 				 <% if @best1[i][0] == 'High Card' %>
 					<div> The high card is <%= @highcardwinner1[i] %>
@@ -44,13 +42,12 @@
 				<% end %>
 			<%end%> 
 		<% elsif @top1[i] < @top2[i] %> 
+			<% @wins2+=1 %> 
 			<% if @wins2 == 0 %>
 				<div>Player 2 is the winner with <%=@best2[i][0]%> </div>
 				<% if @best2[i][0] == 'High Card' %>
 					<div> The high card is <%= @highcardwinner2[i] %>
-
 				<% end %>
-				<% @wins2+=1 %> 
 				<% if @wins1 == 1 %> 
 					<div>Player 1 has <%=@wins1%> win  </div>
 					<div>Player 2 has <%=@wins2%> win  </div>
@@ -59,7 +56,6 @@
 					<div>Player 2 has <%=@wins2%> win  </div>
 				<%end%>
 			<% else %>
-				 <% @wins2+=1 %> 
 				 <div>Player 2 is the winner with <%=@best2[i][0]%> </div>
 				 <% if @best2[i][0] == 'High Card' %>
 					<div> The high card is <%= @highcardwinner2[i] %>

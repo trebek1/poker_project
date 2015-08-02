@@ -3,6 +3,12 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
  
   	# note that each time the function runs, we are only looking at one hand, with one index and one player 
+  	class Array
+	  def mode # Mode defined for use in calculations regarding combinations 
+	    sort_by {|i| grep(i).length }.last
+	  end
+	end
+
 	def hand_results (hand,index,player)
 		
 		max=0 # Set the max value to zero in order to help find the high card for the hand 
@@ -205,6 +211,72 @@ class ApplicationController < ActionController::Base
 
 			if @top1[i] == @top2[i]
 
+				# This cannot happen but included to be complete 
+				if @best1[i][0] == "A Royal Flush"
+					@tie1[i] = 0 
+					@tie[i] = 0 
+				end 
+
+				if @best1[i][0] == "A Straight Flush"
+					if @player1hands[i]['vals'].sort[-1] > @player2hands[i]['vals'].sort[-1]
+						@tie1[i] = @player1hands[i]['vals'].sort[-1]
+						@tie2[i] = 0 
+					elsif @player1hands[i]['vals'].sort[-1] < @player2hands[i]['vals'].sort[-1]
+						@tie1[i] = 0
+						@tie2[i] = @player2hands[i]['vals'].sort[-1]
+					end 
+				end
+
+				if @best1[i][0] == "Four of a Kind"
+					if @player1hands[i]['vals'].mode > @player2hands[i]['vals'].mode
+						@tie1[i] = @player1hands[i]['vals'].mode
+						@tie2[i] = 0 
+					elsif @player1hands[i]['vals'].mode < @player2hands[i]['vals'].mode
+				  		@tie1[i] = 0
+				  		@tie2[i] = @player2hands[i]['vals'].mode
+				  	end 
+				end 
+
+				if @best1[i][0] == "Three of a Kind"
+					if @player1hands[i]['vals'].mode > @player2hands[i]['vals'].mode
+						@tie1[i] = @player1hands[i]['vals'].mode
+						@tie2[i] = 0 
+					elsif @player1hands[i]['vals'].mode < @player2hands[i]['vals'].mode
+				  		@tie1[i] = 0
+				  		@tie2[i] = @player2hands[i]['vals'].mode
+				  	end 
+				end 
+
+				if @best1[i][0] == "A Full House"
+					if @player1hands[i]['vals'].mode > @player2hands[i]['vals'].mode
+						@tie1[i] = @player1hands[i]['vals'].mode
+						@tie2[i] = 0 
+					elsif @player1hands[i]['vals'].mode < @player2hands[i]['vals'].mode
+				  		@tie1[i] = 0
+				  		@tie2[i] = @player2hands[i]['vals'].mode
+				  	end 
+				end 
+
+				if @best1[i][0] == "A Flush"
+					if @player1hands[i]['max'] > @player2hands[i]['max'] 
+						@tie1[i] = @player1hands[i]['max']
+						@tie2[i] = 0
+					elsif @player1hands[i]['max'] < @player2hands[i]['max']   
+						@tie1[i] = 0
+						@tie2[i] = @player2hands[i]['max']
+					end 
+				end 
+
+				if @best1[i][0] == "A Straight"
+					if @player1hands[i]['max'] > @player2hands[i]['max'] 
+						@tie1[i] = @player1hands[i]['max']
+						@tie2[i] = 0
+					elsif @player1hands[i]['max'] < @player2hands[i]['max']   
+						@tie1[i] = 0
+						@tie2[i] = @player2hands[i]['max']
+					end 
+				end 
+
 				if @best1[i][0] == "High Card"
 					if @player1hands[i]['vals'].sort[-1] > @player2hands[i]['vals'].sort[-1]
 						@tie1[i] = @player1hands[i]['vals'].sort[-1]
@@ -247,7 +319,6 @@ class ApplicationController < ActionController::Base
 					end
 				end
 			
-		   
 				if @best1[i][0] == "Two Pair"    
 					if @player1hands[i]['pairvals'].sort[-1] > @player2hands[i]['pairvals'].sort[-1]
 						@tie1[i] = @player1hands[i]['pairvals'].sort[-1]
@@ -295,8 +366,8 @@ class ApplicationController < ActionController::Base
 						@tie1[i] = @player1hands[i]['pairvals'][0]
 						@tie2[i] = 0
 					elsif @player1hands[i]['pairvals'][0] < @player2hands[i]['pairvals'][0]
-						@tie2[i] = @player1hands[i]['pairvals'][0]
 						@tie1[i] = 0
+						@tie2[i] = @player2hands[i]['pairvals'][0]
 					elsif @player1hands[i]['pairvals'][0] == @player2hands[i]['pairvals'][0]
 						if @player1hands[i]['vals'].sort[-1] > @player2hands[i]['vals'].sort[-1]
 							@tie1[i] = @player1hands[i]['vals'].sort[-1]
@@ -332,6 +403,7 @@ class ApplicationController < ActionController::Base
 					end
 				end 
 			else 
+				# if no tie, tie should be zero
 				@tie1[i] = 0
 				@tie2[i] = 0
 			end
