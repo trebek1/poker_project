@@ -206,9 +206,46 @@ class ApplicationController < ActionController::Base
 			if @top1[i] == @top2[i]
 
 				if @best1[i][0] == "Two Pair"    
-					@tie1[i] = 1337
-					@tie2[i] = 1337
-				end 
+					if @player1hands[i]['pairvals'].sort[-1] > @player2hands[i]['pairvals'].sort[-1]
+						@tie1[i] = @player1hands[i]['pairvals'].sort[-1]
+						@tie2[i] = 0
+					elsif @player1hands[i]['pairvals'].sort[-1] < @player2hands[i]['pairvals'].sort[-1]
+						@tie1[i] = 0
+						@tie2[i] = @player2hands[i]['pairvals'].sort[-1]
+					elsif @player1hands[i]['pairvals'].sort[-1] == @player2hands[i]['pairvals'].sort[-1]
+						if @player1hands[i]['pairvals'].sort[-2] > @player2hands[i]['pairvals'].sort[-2]
+							@tie1[i] = @player1hands[i]['pairvals'].sort[-2]
+							@tie2[i] = 0
+						elsif @player1hands[i]['pairvals'].sort[-2] < @player2hands[i]['pairvals'].sort[-2]
+							@tie1[i] = 0
+							@tie2[i] = @player2hands[i]['pairvals'].sort[-2]
+						elsif @player1hands[i]['pairvals'].sort[-2] == @player2hands[i]['pairvals'].sort[-2]
+							if @player1hands[i]['vals'].sort[-1] > @player2hands[i]['vals'].sort[-1]
+								@tie1[i] = @player1hands[i]['vals'].sort[-1]
+								@tie2[i] = 0
+							elsif @player1hands[i]['vals'].sort[-1] < @player2hands[i]['vals'].sort[-1]
+								@tie1[i] = 0
+								@tie2[i] = @player2hands[i]['vals'].sort[-1]
+							elsif @player1hands[i]['vals'].sort[-1] == @player2hands[i]['vals'].sort[-1]
+								if @player1hands[i]['vals'].sort[-2] > @player2hands[i]['vals'].sort[-2]
+									@tie1[i] = @player1hands[i]['vals'].sort[-2]
+									@tie2[i] = 0
+								elsif @player1hands[i]['vals'].sort[-2] < @player2hands[i]['vals'].sort[-2]
+									@tie1[i] = 0
+									@tie2[i] = @player2hands[i]['vals'].sort[-2]
+								elsif @player1hands[i]['vals'].sort[-2] == @player2hands[i]['vals'].sort[-2]
+									if @player1hands[i]['vals'].sort[-3] > @player2hands[i]['vals'].sort[-3]
+										@tie1[i] = @player1hands[i]['vals'].sort[-3]
+										@tie2[i] = 0
+									elsif @player1hands[i]['vals'].sort[-3] < @player2hands[i]['vals'].sort[-3]
+										@tie1[i] = 0
+										@tie2[i] = @player2hands[i]['vals'].sort[-3]
+									end 
+								end
+							end
+						end
+					end
+				end  
 
 				if @best1[i][0] == "A Pair"
 					if @player1hands[i]['pairvals'][0] > @player2hands[i]['pairvals'][0]

@@ -430,7 +430,7 @@ RSpec.describe SimulationsController do
 	 	expect(@searchinfo).to eq ['d']
 	end 
 
-	it " should find the correct winner if both have a par" do 
+	it " should find the correct winner if both have a pair" do 
 		
 		# Case 1 Higher Pair  
 		# Case 2 Same pair, look in single cards for winner 
@@ -495,5 +495,72 @@ RSpec.describe SimulationsController do
 		expect(@tie1[0]).to eq 5
 		expect(@tie1[1]).to eq 3 
 	end 
+
+	it "should find the correct winner if both players have two pair " do 
+
+		# Case 1 2nd pair wins   
+		# Case 2 Same pairs, look in single cards for winner (highest)
+		
+		@tie1 = Array.new
+		@tie2 = Array.new 
+
+		@top1 = [40,40] # A pair is a value of 20 
+		@top2 = [40,40]
+		@best1 = ["Two Pair", "Two Pair"] 
+		@player1hands = [{'pairvals' => [7,6]},{'pairvals' => [7,6], 'vals' => [7,6,3]}]
+		@player2hands = [{'pairvals' => [7,5]},{'pairvals' => [7,6], 'vals' => [7,6,2]}]
+
+		for i in 0..@top1.length-1 do 
+
+			if @top1[i] == @top2[i]
+
+				if @best1[i] == "Two Pair" # Modified for test @best[i][0] in actual program  
+					if @player1hands[i]['pairvals'].sort[-1] > @player2hands[i]['pairvals'].sort[-1]
+						@tie1[i] = @player1hands[i]['pairvals'].sort[-1]
+						@tie2[i] = 0
+					elsif @player1hands[i]['pairvals'].sort[-1] < @player2hands[i]['pairvals'].sort[-1]
+						@tie1[i] = 0
+						@tie2[i] = @player2hands[i]['pairvals'].sort[-1]
+					elsif @player1hands[i]['pairvals'].sort[-1] == @player2hands[i]['pairvals'].sort[-1]
+						if @player1hands[i]['pairvals'].sort[-2] > @player2hands[i]['pairvals'].sort[-2]
+							@tie1[i] = @player1hands[i]['pairvals'].sort[-2]
+							@tie2[i] = 0
+						elsif @player1hands[i]['pairvals'].sort[-2] < @player2hands[i]['pairvals'].sort[-2]
+							@tie1[i] = 0
+							@tie2[i] = @player2hands[i]['pairvals'].sort[-2]
+						elsif @player1hands[i]['pairvals'].sort[-2] == @player2hands[i]['pairvals'].sort[-2]
+							if @player1hands[i]['vals'].sort[-1] > @player2hands[i]['vals'].sort[-1]
+								@tie1[i] = @player1hands[i]['vals'].sort[-1]
+								@tie2[i] = 0
+							elsif @player1hands[i]['vals'].sort[-1] < @player2hands[i]['vals'].sort[-1]
+								@tie1[i] = 0
+								@tie2[i] = @player2hands[i]['vals'].sort[-1]
+							elsif @player1hands[i]['vals'].sort[-1] == @player2hands[i]['vals'].sort[-1]
+								if @player1hands[i]['vals'].sort[-2] > @player2hands[i]['vals'].sort[-2]
+									@tie1[i] = @player1hands[i]['vals'].sort[-2]
+									@tie2[i] = 0
+								elsif @player1hands[i]['vals'].sort[-2] < @player2hands[i]['vals'].sort[-2]
+									@tie1[i] = 0
+									@tie2[i] = @player2hands[i]['vals'].sort[-2]
+								elsif @player1hands[i]['vals'].sort[-2] == @player2hands[i]['vals'].sort[-2]
+									if @player1hands[i]['vals'].sort[-3] > @player2hands[i]['vals'].sort[-3]
+										@tie1[i] = @player1hands[i]['vals'].sort[-3]
+										@tie2[i] = 0
+									elsif @player1hands[i]['vals'].sort[-3] < @player2hands[i]['vals'].sort[-3]
+										@tie1[i] = 0
+										@tie2[i] = @player2hands[i]['vals'].sort[-3]
+									end 
+								end
+							end
+						end
+					end
+				end  
+			end 
+		end
+		expect(@tie1[0]).to eq 6
+		expect(@tie1[1]).to eq 3 
+	end 
+
+
 
 end # end spec (controller)
