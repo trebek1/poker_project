@@ -6,13 +6,11 @@ class ApplicationController < ActionController::Base
   	
 
 	def hand_results (hand,index,player)
-	
-		max=0 # Set the max value to zero in order to help find the high card for the hand 
 
+		max=0 # Set the max value to zero in order to help find the high card for the hand 
 		# create an array to store the values of each card in a hand 
 		vals = Array.new
-		hand.chars.each_with_index do |card, char|
-			
+		hand.chars.each_with_index do |card, char|	
 			
 			# Go through each card and add to a hash for analysis 
 			if  	@info[card] == nil
@@ -121,7 +119,7 @@ class ApplicationController < ActionController::Base
 			end
 
 			#if all five cards are one suit we have a flush 
-			if @info[key] == 5 && (key == 'H' || key == 'S' || key == 'D' || key == 'C' )
+			if @info['H'] == 5 || @info['S'] == 5 || @info['D'] == 5 || @info['C'] == 5 
 				# if those five cards are the highest five we have royal flush
 				if @info['K'] == 1 && @info['Q'] == 1 && @info['J'] == 1 && @info['A'] == 1 && @info['T'] == 1 
 				@info['Royal'] = 1
@@ -212,7 +210,8 @@ class ApplicationController < ActionController::Base
 					@tie1[i] = 0 
 					@tie[i] = 0 
 				end 
-
+				# find winner with two straight flushes
+				# larger straight flush will be the largest value in the values array
 				if @best1[i][0] == "A Straight Flush"
 					if @player1hands[i]['vals'].sort[-1] > @player2hands[i]['vals'].sort[-1]
 						@tie1[i] = @player1hands[i]['vals'].sort[-1]
@@ -222,7 +221,8 @@ class ApplicationController < ActionController::Base
 						@tie2[i] = @player2hands[i]['vals'].sort[-1]
 					end 
 				end
-
+				# find winner with 2 four of a kinds
+				# larger 4 of a kind will be the mode of the value array
 				if @best1[i][0] == "Four of a Kind"
 					if @player1hands[i]['vals'].mode > @player2hands[i]['vals'].mode
 						@tie1[i] = @player1hands[i]['vals'].mode
@@ -232,7 +232,8 @@ class ApplicationController < ActionController::Base
 				  		@tie2[i] = @player2hands[i]['vals'].mode
 				  	end 
 				end 
-
+				# find winner with two three of a kinds
+				# larger 3 of a kind will be the mode of the values array  
 				if @best1[i][0] == "Three of a Kind"
 					if @player1hands[i]['vals'].mode > @player2hands[i]['vals'].mode
 						@tie1[i] = @player1hands[i]['vals'].mode
@@ -242,7 +243,8 @@ class ApplicationController < ActionController::Base
 				  		@tie2[i] = @player2hands[i]['vals'].mode
 				  	end 
 				end 
-
+				# find winner with two full houses. Larger full house will be larger 3 of a kind, 
+				# which can be found as the mode of the values array 
 				if @best1[i][0] == "A Full House"
 					if @player1hands[i]['vals'].mode > @player2hands[i]['vals'].mode
 						@tie1[i] = @player1hands[i]['vals'].mode
@@ -252,7 +254,7 @@ class ApplicationController < ActionController::Base
 				  		@tie2[i] = @player2hands[i]['vals'].mode
 				  	end 
 				end 
-
+				# find winner with two flushes. Since a flush is 5 cards, max will store largest. 
 				if @best1[i][0] == "A Flush"
 					if @player1hands[i]['max'] > @player2hands[i]['max'] 
 						@tie1[i] = @player1hands[i]['max']
@@ -262,7 +264,8 @@ class ApplicationController < ActionController::Base
 						@tie2[i] = @player2hands[i]['max']
 					end 
 				end 
-
+				# find winner with two straights. Since a straight is 5 cards, the max will have 
+				# the larger of the two saved 
 				if @best1[i][0] == "A Straight"
 					if @player1hands[i]['max'] > @player2hands[i]['max'] 
 						@tie1[i] = @player1hands[i]['max']
@@ -272,7 +275,7 @@ class ApplicationController < ActionController::Base
 						@tie2[i] = @player2hands[i]['max']
 					end 
 				end 
-
+				# find winner with same high card. Itterate through all 5 cards until one is bigger 
 				if @best1[i][0] == "High Card"
 					if @player1hands[i]['vals'].sort[-1] > @player2hands[i]['vals'].sort[-1]
 						@tie1[i] = @player1hands[i]['vals'].sort[-1]
@@ -314,7 +317,8 @@ class ApplicationController < ActionController::Base
 						end
 					end
 				end
-			
+				# find winner with same two pairs. First check each of the pair values (high to low) then check
+				# the remaining cards high to low 
 				if @best1[i][0] == "Two Pair"    
 					if @player1hands[i]['pairvals'].sort[-1] > @player2hands[i]['pairvals'].sort[-1]
 						@tie1[i] = @player1hands[i]['pairvals'].sort[-1]
@@ -356,7 +360,8 @@ class ApplicationController < ActionController::Base
 						end
 					end
 				end  
-
+				# find winner with same pairs, first check pair value (high to low), then itterate through all remaining cards
+				# high to low  
 				if @best1[i][0] == "A Pair"
 					if @player1hands[i]['pairvals'][0] > @player2hands[i]['pairvals'][0]
 						@tie1[i] = @player1hands[i]['pairvals'][0]
@@ -405,7 +410,6 @@ class ApplicationController < ActionController::Base
 			end
 
 		end # Ends the loop for the different types of tied hands 
-
 
 	end # ends the tie function 
 

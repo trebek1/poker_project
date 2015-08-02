@@ -633,20 +633,22 @@ RSpec.describe SimulationsController do
 
 		@top1 = [500] # A pair is a value of 20 
 		@top2 = [500]
-		@best1 = ["A Straight Flush","A Straight Flush"] 
-		@player1hands = [{'vals' => [5,6,7,8,9,10]}]
-		@player2hands = [{'vals' => [6,7,8,9,10,11]}]
-		for i in 0..@top1.length-1 do 
-			if @best1[i] == "A Straight Flush" # This line has been modified for testing purposes
-				if @player1hands[i]['vals'].sort[-1] > @player2hands[i]['vals'].sort[-1]
-					@tie1[i] = @player1hands[i]['vals'].sort[-1]
-					@tie2[i] = 0 
-				elsif @player1hands[i]['vals'].sort[-1] < @player2hands[i]['vals'].sort[-1]
-					@tie1[i] = 0
-					@tie2[i] = @player2hands[i]['vals'].sort[-1]
-				end 
+		@best1 = ["A Straight Flush"]
+		@player1hands = [{'vals' => [5,6,7,8,9,10], 'D' => 5}]
+		@player2hands = [{'vals' => [6,7,8,9,10,11],'D' => 5}]
+		for i in 0..@top1.length-1 do
+			if @player1hands[i]['H'] == 5 || @player1hands[i]['S'] == 5 || @player1hands[i]['D'] == 5 || @player1hands[i]['C'] == 5  
+				if @best1[i] == "A Straight Flush" # This line has been modified for testing purposes
+					if @player1hands[i]['vals'].sort[-1] > @player2hands[i]['vals'].sort[-1]
+						@tie1[i] = @player1hands[i]['vals'].sort[-1]
+						@tie2[i] = 0 
+					elsif @player1hands[i]['vals'].sort[-1] < @player2hands[i]['vals'].sort[-1]
+						@tie1[i] = 0
+						@tie2[i] = @player2hands[i]['vals'].sort[-1]
+					end 
+				end
 			end
-		end
+		end 
 		expect(@tie2[0]).to eq 11 
 		expect(@tie1[0]).to eq 0   
 	end 

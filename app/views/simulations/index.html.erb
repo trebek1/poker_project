@@ -5,11 +5,7 @@
 	<% for i in 0..@hands1.length-1 do %>
 		<br>
 		<div> This is round <%= i+1 %> </div>
-		<!-- <br>
-		<div>P1 <%= @player1hands[i] %> </div>
-		<br> 
-		<div>P2 <%= @player2hands[i] %> </div> -->
-		<br>
+		<div> <%= @player1hands[i] %> </div>
 		Player 1's Hand is <%=@hands1[i][0] + @hands1[i][1] + "," + @hands1[i][2] + @hands1[i][3] + "," + @hands1[i][4] + @hands1[i][5] + "," + @hands1[i][6] + @hands1[i][7] + ","+ @hands1[i][8] + @hands1[i][9] %> <br>
 		Player 2's Hand is <%=@hands2[i][0] + @hands2[i][1] + "," + @hands2[i][2] + @hands2[i][3] + "," + @hands2[i][4] + @hands2[i][5] + "," + @hands2[i][6] + @hands2[i][7] + ","+ @hands2[i][8] + @hands2[i][9] %> <br>
 		<br> 
