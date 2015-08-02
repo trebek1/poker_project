@@ -2,18 +2,22 @@
 
 <div class = "row">
 	<div class = "col-xs-3" style="background-color: HoneyDew; margin: 20px">
-	
 	<% for i in 0..@hands1.length-1 do %>
 		<br>
 		<div> This is round <%= i+1 %> </div>
 		<br>
+		<div> <%= @player1hands[i] %> </div>
+		<br> 
 		Player 1's Hand is <%=@hands1[i][0] + @hands1[i][1] + "," + @hands1[i][2] + @hands1[i][3] + "," + @hands1[i][4] + @hands1[i][5] + "," + @hands1[i][6] + @hands1[i][7] + ","+ @hands1[i][8] + @hands1[i][9] %> <br>
 		Player 2's Hand is <%=@hands2[i][0] + @hands2[i][1] + "," + @hands2[i][2] + @hands2[i][3] + "," + @hands2[i][4] + @hands2[i][5] + "," + @hands2[i][6] + @hands2[i][7] + ","+ @hands2[i][8] + @hands2[i][9] %> <br>
+		<br> 
+
 		<% if @top1[i] > @top2[i] %>
 			<% if @wins1 == 0 %>
 				<div>Player 1 is the winner with <%=@best1[i][0]%> </div>
 				<% if @best1[i][0] == 'High Card' %>
 					<div> The high card is <%= @highcardwinner1[i] %>
+
 				<% end %>
 				<% @wins1+=1 %> 
 				<% if @wins2 == 1 %>
@@ -37,11 +41,12 @@
 					 <div>Player 2 has <%=@wins2%> wins  </div>
 				<% end %>
 			<%end%> 
-		<% else %> 
-		<% if @wins2 == 0 %>
+		<% elsif @top2[i] < @top2[i] %> 
+			<% if @wins2 == 0 %>
 				<div>Player 2 is the winner with <%=@best2[i][0]%> </div>
 				<% if @best2[i][0] == 'High Card' %>
 					<div> The high card is <%= @highcardwinner2[i] %>
+
 				<% end %>
 				<% @wins2+=1 %> 
 				<% if @wins1 == 1 %> 
@@ -63,6 +68,40 @@
 				<% else %>
 					<div>Player 1 has <%=@wins1%> wins  </div>
 					<div>Player 2 has <%=@wins2%> wins  </div>
+				<%end%>
+			<%end%>
+		<% elsif @top2[i] == @top1[i] %> 
+			<% if @tie1[i] > @tie2[i] %> 
+				<%@wins1+=1 %> 
+				<div>Player 1 is the winner with <%=@best1[i][0]%> </div> 
+				<% if @wins1 ==1 && @wins2 ==0 || @wins1 ==1 && @wins2 >1%>
+					<div>Player 1 has <%=@wins1%> win  </div>
+					<div>Player 2 has <%=@wins2%> wins </div>
+				<% elsif @wins1 ==1 && @wins2 ==1 %>
+				 	<div>Player 1 has <%=@wins1%> win  </div>
+					<div>Player 2 has <%=@wins2%> win  </div>
+				<% elsif @wins1 >1 && @wins2 ==0 || @wins1 >1 && @wins2 >1%>
+					<div>Player 1 has <%=@wins1%> wins  </div>
+					<div>Player 2 has <%=@wins2%> wins  </div>
+				<% elsif @wins1 >1 && @wins2 ==0 %>
+				 	<div>Player 1 has <%=@wins1%> wins </div>
+					<div>Player 2 has <%=@wins2%> win  </div>
+				<%end%>	
+			<% elsif @tie1[i] < @tie2[i] %> 
+				<%@wins2+=1 %>
+				<div>Player 2 is the winner with <%=@best2[i][0]%> </div>
+				<% if @wins2 ==1 && @wins1 ==0 || @wins2 ==1 && @wins1 >1%>
+					<div>Player 1 has <%=@wins1%> wins  </div>
+					<div>Player 2 has <%=@wins2%> win </div>
+				<% elsif @wins2 ==1 && @wins1 ==1 %>
+				 	<div>Player 1 has <%=@wins1%> win  </div>
+					<div>Player 2 has <%=@wins2%> win  </div>
+				<% elsif @wins2 >1 && @wins1 ==0 || @wins2 >1 && @wins1 >1%>
+					<div>Player 1 has <%=@wins1%> wins  </div>
+					<div>Player 2 has <%=@wins2%> wins  </div>
+				<% elsif @wins2 >1 && @wins1 ==0 %>
+				 	<div>Player 1 has <%=@wins1%> win  </div>
+					<div>Player 2 has <%=@wins2%> wins </div>	
 				<%end%>
 			<%end%>
 		<%end%>

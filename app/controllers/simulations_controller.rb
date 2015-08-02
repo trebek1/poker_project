@@ -1,14 +1,21 @@
 class SimulationsController < ApplicationController
   def index
-  	@data = File.read("poker.txt").gsub(/\s+/, "").scan(/.{10}/) # Data from file removing dashes
-  	# and making into 10 piece increments so that each one is a "hand" for either player 1 or 2 
+  	# Data from file removing dashes and making into 10 piece increments so that each one is a "hand" for either player 1 or 2 
+    @data = File.read("poker.txt").gsub(/\s+/, "").scan(/.{10}/) 
+  	
+    # info about the given hand in the hand_results function
+    @info = Hash.new 
 
-  	@hands1 = Array.new # player 1 and player 2 hands arrays ( just the cards from the file)
+    # object with all info for all hands (for given player) in hand results function   
+    @eachinfo = Hash.new 
+
+    # player 1 and player 2 hands arrays (just the cards from the file)
+    @hands1 = Array.new 
   	@hands2 = Array.new
-  	@player1hands = Hash.new #player hands with calculated information about combinations
+  	
+    #player hands with calculated information about combinations
+    @player1hands = Hash.new 
     @player2hands = Hash.new
-    @info = Hash.new # info about the given hand in the hand_results function
-    @eachinfo = Hash.new # object with all info for all hands (for given player) in hand results function   
     
     #Store best hand numerical value 
     @top1 = Array.new 
@@ -43,7 +50,7 @@ class SimulationsController < ApplicationController
     @hands2.each_with_index do |hand,index|
       hand_results(hand,index,2)  
     end 
-    
+
     # find high card winner card from numerical representation
     for i in 0..@top1.length-1 do 
       if @top1[i] <= 10
@@ -68,6 +75,8 @@ class SimulationsController < ApplicationController
       elsif @top2[i] == 14
         @highcardwinner2[i] = "A"
       end 
-    end 
+    end
+    # run tie winner to get a result when there is a tie 
+    tie_winner  
   end 
 end
