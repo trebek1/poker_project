@@ -180,6 +180,7 @@ class ApplicationController < ActionController::Base
 		end 
 
 	    # save the info to the index of the array of hands 
+	    # This will give us an array with all of the players hand information in it at the end 
 		@eachinfo[index] = @info
 			
 		if player == 1
@@ -279,45 +280,56 @@ class ApplicationController < ActionController::Base
 				end 
 				# find winner with same high card. Itterate through all 5 cards until one is bigger 
 				if @combo_name_1[i][0] == "High Card"
-					if @hand_information_player_1[i]['vals'].sort[-1] > @hand_information_player_2[i]['vals'].sort[-1]
-						@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-1]
-						@tie_2[i] = 0
-					elsif @hand_information_player_1[i]['vals'].sort[-1] < @hand_information_player_2[i]['vals'].sort[-1]
-						@tie_1[i] = 0
-						@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-1]
-					elsif @hand_information_player_1[i]['vals'].sort[-1] == @hand_information_player_2[i]['vals'].sort[-1]
-						if @hand_information_player_1[i]['vals'].sort[-2] > @hand_information_player_2[i]['vals'].sort[-2]
-							@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-2]
+					for k in 1..5 do
+						if @hand_information_player_1[i]['vals'].sort[-k] > @hand_information_player_2[i]['vals'].sort[-k]
+							@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-k]
 							@tie_2[i] = 0
-						elsif @hand_information_player_1[i]['vals'].sort[-2] < @hand_information_player_2[i]['vals'].sort[-2]
+							break 
+						elsif @hand_information_player_1[i]['vals'].sort[-k] < @hand_information_player_2[i]['vals'].sort[-k]
 							@tie_1[i] = 0
-							@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-2]
-						elsif @hand_information_player_1[i]['vals'].sort[-2] == @hand_information_player_2[i]['vals'].sort[-2]
-							if @hand_information_player_1[i]['vals'].sort[-3] > @hand_information_player_2[i]['vals'].sort[-3]
-								@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-3]
-								@tie_2[i] = 0
-							elsif @hand_information_player_1[i]['vals'].sort[-3] < @hand_information_player_2[i]['vals'].sort[-3]
-								@tie_1[i] = 0
-								@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-3]
-							elsif @hand_information_player_1[i]['vals'].sort[-3] == @hand_information_player_2[i]['vals'].sort[-3]
-								if @hand_information_player_1[i]['vals'].sort[-4] > @hand_information_player_2[i]['vals'].sort[-4]
-									@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-4]
-									@tie_2[i] = 0
-								elsif @hand_information_player_1[i]['vals'].sort[-4] < @hand_information_player_2[i]['vals'].sort[-4]
-									@tie_1[i] = 0
-									@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-4]
-								elsif @hand_information_player_1[i]['vals'].sort[-4] == @hand_information_player_2[i]['vals'].sort[-4]
-									if @hand_information_player_1[i]['vals'].sort[-5 ] > @hand_information_player_2[i]['vals'].sort[-5]
-										@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-5]
-										@tie_2[i] = 0
-									elsif @hand_information_player_1[i]['vals'].sort[-5] < @hand_information_player_2[i]['vals'].sort[-5]
-										@tie_1[i] = 0
-										@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-5]
-									end
-								end
-							end
-						end
-					end
+							@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-k]
+							break
+						end 
+					end 
+					# if @hand_information_player_1[i]['vals'].sort[-1] > @hand_information_player_2[i]['vals'].sort[-1]
+					# 	@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-1]
+					# 	@tie_2[i] = 0
+					# elsif @hand_information_player_1[i]['vals'].sort[-1] < @hand_information_player_2[i]['vals'].sort[-1]
+					# 	@tie_1[i] = 0
+					# 	@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-1]
+					# elsif @hand_information_player_1[i]['vals'].sort[-1] == @hand_information_player_2[i]['vals'].sort[-1]
+					# 	if @hand_information_player_1[i]['vals'].sort[-2] > @hand_information_player_2[i]['vals'].sort[-2]
+					# 		@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-2]
+					# 		@tie_2[i] = 0
+					# 	elsif @hand_information_player_1[i]['vals'].sort[-2] < @hand_information_player_2[i]['vals'].sort[-2]
+					# 		@tie_1[i] = 0
+					# 		@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-2]
+					# 	elsif @hand_information_player_1[i]['vals'].sort[-2] == @hand_information_player_2[i]['vals'].sort[-2]
+					# 		if @hand_information_player_1[i]['vals'].sort[-3] > @hand_information_player_2[i]['vals'].sort[-3]
+					# 			@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-3]
+					# 			@tie_2[i] = 0
+					# 		elsif @hand_information_player_1[i]['vals'].sort[-3] < @hand_information_player_2[i]['vals'].sort[-3]
+					# 			@tie_1[i] = 0
+					# 			@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-3]
+					# 		elsif @hand_information_player_1[i]['vals'].sort[-3] == @hand_information_player_2[i]['vals'].sort[-3]
+					# 			if @hand_information_player_1[i]['vals'].sort[-4] > @hand_information_player_2[i]['vals'].sort[-4]
+					# 				@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-4]
+					# 				@tie_2[i] = 0
+					# 			elsif @hand_information_player_1[i]['vals'].sort[-4] < @hand_information_player_2[i]['vals'].sort[-4]
+					# 				@tie_1[i] = 0
+					# 				@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-4]
+					# 			elsif @hand_information_player_1[i]['vals'].sort[-4] == @hand_information_player_2[i]['vals'].sort[-4]
+					# 				if @hand_information_player_1[i]['vals'].sort[-5 ] > @hand_information_player_2[i]['vals'].sort[-5]
+					# 					@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-5]
+					# 					@tie_2[i] = 0
+					# 				elsif @hand_information_player_1[i]['vals'].sort[-5] < @hand_information_player_2[i]['vals'].sort[-5]
+					# 					@tie_1[i] = 0
+					# 					@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-5]
+					# 				end
+					# 			end
+					# 		end
+					# 	end
+					# end
 				end
 				# find winner with same two pairs. First check each of the pair values (high to low) then check
 				# the remaining cards high to low 
@@ -336,29 +348,35 @@ class ApplicationController < ActionController::Base
 							@tie_1[i] = 0
 							@tie_2[i] = @hand_information_player_2[i]['pairvals'].sort[-2]
 						elsif @hand_information_player_1[i]['pairvals'].sort[-2] == @hand_information_player_2[i]['pairvals'].sort[-2]
-							if @hand_information_player_1[i]['vals'].sort[-1] > @hand_information_player_2[i]['vals'].sort[-1]
-								@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-1]
-								@tie_2[i] = 0
-							elsif @hand_information_player_1[i]['vals'].sort[-1] < @hand_information_player_2[i]['vals'].sort[-1]
-								@tie_1[i] = 0
-								@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-1]
-							elsif @hand_information_player_1[i]['vals'].sort[-1] == @hand_information_player_2[i]['vals'].sort[-1]
-								if @hand_information_player_1[i]['vals'].sort[-2] > @hand_information_player_2[i]['vals'].sort[-2]
-									@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-2]
+							for k in 1..3 do
+								if @hand_information_player_1[i]['vals'].sort[-k] > @hand_information_player_2[i]['vals'].sort[-k]
+									@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-k]
 									@tie_2[i] = 0
-								elsif @hand_information_player_1[i]['vals'].sort[-2] < @hand_information_player_2[i]['vals'].sort[-2]
+									break 
+								elsif @hand_information_player_1[i]['vals'].sort[-k] < @hand_information_player_2[i]['vals'].sort[-k]
 									@tie_1[i] = 0
-									@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-2]
-								elsif @hand_information_player_1[i]['vals'].sort[-2] == @hand_information_player_2[i]['vals'].sort[-2]
-									if @hand_information_player_1[i]['vals'].sort[-3] > @hand_information_player_2[i]['vals'].sort[-3]
-										@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-3]
-										@tie_2[i] = 0
-									elsif @hand_information_player_1[i]['vals'].sort[-3] < @hand_information_player_2[i]['vals'].sort[-3]
-										@tie_1[i] = 0
-										@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-3]
-									end 
-								end
-							end
+									@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-k]
+									break
+								end 
+							end 
+
+							# elsif @hand_information_player_1[i]['vals'].sort[-1] == @hand_information_player_2[i]['vals'].sort[-1]
+							# 	if @hand_information_player_1[i]['vals'].sort[-2] > @hand_information_player_2[i]['vals'].sort[-2]
+							# 		@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-2]
+							# 		@tie_2[i] = 0
+							# 	elsif @hand_information_player_1[i]['vals'].sort[-2] < @hand_information_player_2[i]['vals'].sort[-2]
+							# 		@tie_1[i] = 0
+							# 		@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-2]
+							# 	elsif @hand_information_player_1[i]['vals'].sort[-2] == @hand_information_player_2[i]['vals'].sort[-2]
+							# 		if @hand_information_player_1[i]['vals'].sort[-3] > @hand_information_player_2[i]['vals'].sort[-3]
+							# 			@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-3]
+							# 			@tie_2[i] = 0
+							# 		elsif @hand_information_player_1[i]['vals'].sort[-3] < @hand_information_player_2[i]['vals'].sort[-3]
+							# 			@tie_1[i] = 0
+							# 			@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-3]
+							# 		end 
+							# 	end
+							# end
 						end
 					end
 				end  
@@ -372,37 +390,49 @@ class ApplicationController < ActionController::Base
 						@tie_1[i] = 0
 						@tie_2[i] = @hand_information_player_2[i]['pairvals'][0]
 					elsif @hand_information_player_1[i]['pairvals'][0] == @hand_information_player_2[i]['pairvals'][0]
-						if @hand_information_player_1[i]['vals'].sort[-1] > @hand_information_player_2[i]['vals'].sort[-1]
-							@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-1]
-							@tie_2[i] = 0
-						elsif @hand_information_player_1[i]['vals'].sort[-1] < @hand_information_player_2[i]['vals'].sort[-1]
-							@tie_1[i] = 0
-							@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-1]
-						elsif @hand_information_player_1[i]['vals'].sort[-1] == @hand_information_player_2[i]['vals'].sort[-1]
-							if @hand_information_player_1[i]['vals'].sort[-2] > @hand_information_player_2[i]['vals'].sort[-2]
-								@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-2]
+						for k in 1..4 do
+							if @hand_information_player_1[i]['vals'].sort[-k] > @hand_information_player_2[i]['vals'].sort[-k]
+								@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-k]
 								@tie_2[i] = 0
-							elsif @hand_information_player_1[i]['vals'].sort[-2] < @hand_information_player_2[i]['vals'].sort[-2]
+								break 
+							elsif @hand_information_player_1[i]['vals'].sort[-k] < @hand_information_player_2[i]['vals'].sort[-k]
 								@tie_1[i] = 0
-								@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-2]
-							elsif @hand_information_player_1[i]['vals'].sort[-2] == @hand_information_player_2[i]['vals'].sort[-2]
-								if @hand_information_player_1[i]['vals'].sort[-3] > @hand_information_player_2[i]['vals'].sort[-3]
-									@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-3]
-									@tie_2[i] = 0
-								elsif @hand_information_player_1[i]['vals'].sort[-3] < @hand_information_player_2[i]['vals'].sort[-3]
-									@tie_1[i] = 0
-									@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-3]
-								elsif @hand_information_player_1[i]['vals'].sort[-3] == @hand_information_player_2[i]['vals'].sort[-3]
-									if @hand_information_player_1[i]['vals'].sort[-4] > @hand_information_player_2[i]['vals'].sort[-4]
-										@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-4]
-										@tie_2[i] = 0
-									elsif @hand_information_player_1[i]['vals'].sort[-4] < @hand_information_player_2[i]['vals'].sort[-4]
-										@tie_1[i] = 0
-										@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-4]
-									end
-								end
-							end
-						end
+								@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-k]
+								break
+							end 
+						end 
+						
+						# if @hand_information_player_1[i]['vals'].sort[-1] > @hand_information_player_2[i]['vals'].sort[-1]
+						# 	@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-1]
+						# 	@tie_2[i] = 0
+						# elsif @hand_information_player_1[i]['vals'].sort[-1] < @hand_information_player_2[i]['vals'].sort[-1]
+						# 	@tie_1[i] = 0
+						# 	@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-1]
+						# elsif @hand_information_player_1[i]['vals'].sort[-1] == @hand_information_player_2[i]['vals'].sort[-1]
+						# 	if @hand_information_player_1[i]['vals'].sort[-2] > @hand_information_player_2[i]['vals'].sort[-2]
+						# 		@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-2]
+						# 		@tie_2[i] = 0
+						# 	elsif @hand_information_player_1[i]['vals'].sort[-2] < @hand_information_player_2[i]['vals'].sort[-2]
+						# 		@tie_1[i] = 0
+						# 		@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-2]
+						# 	elsif @hand_information_player_1[i]['vals'].sort[-2] == @hand_information_player_2[i]['vals'].sort[-2]
+						# 		if @hand_information_player_1[i]['vals'].sort[-3] > @hand_information_player_2[i]['vals'].sort[-3]
+						# 			@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-3]
+						# 			@tie_2[i] = 0
+						# 		elsif @hand_information_player_1[i]['vals'].sort[-3] < @hand_information_player_2[i]['vals'].sort[-3]
+						# 			@tie_1[i] = 0
+						# 			@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-3]
+						# 		elsif @hand_information_player_1[i]['vals'].sort[-3] == @hand_information_player_2[i]['vals'].sort[-3]
+						# 			if @hand_information_player_1[i]['vals'].sort[-4] > @hand_information_player_2[i]['vals'].sort[-4]
+						# 				@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-4]
+						# 				@tie_2[i] = 0
+						# 			elsif @hand_information_player_1[i]['vals'].sort[-4] < @hand_information_player_2[i]['vals'].sort[-4]
+						# 				@tie_1[i] = 0
+						# 				@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-4]
+						# 			end
+						# 		end
+						# 	end
+						# end
 					end
 				end 
 			else 
