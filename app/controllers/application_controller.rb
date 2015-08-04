@@ -201,7 +201,7 @@ class ApplicationController < ActionController::Base
 			# once we loop through all the hands we want all of them to be accessable in the hand info for the player
 			# This will allow us to pull the information into the view 
 			@hand_information_player_1 = @eachinfo.dup
-			@best_card_value_1[index] = @hand_score # Could use max but we use best_card_value for clarity 
+			@best_card_value_1[index] = @hand_score 
 			@combo_name_1[index] = @combo_name.dup
 		elsif player == 2  
 			@hand_information_player_2 = @eachinfo.dup
