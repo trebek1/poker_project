@@ -201,11 +201,11 @@ class ApplicationController < ActionController::Base
 			# once we loop through all the hands we want all of them to be accessable in the hand info for the player
 			# This will allow us to pull the information into the view 
 			@hand_information_player_1 = @eachinfo.dup
-			@best_card_value_1[index] = @hand_score 
+			@best_hand_value_1[index] = @hand_score 
 			@combo_name_1[index] = @combo_name.dup
 		elsif player == 2  
 			@hand_information_player_2 = @eachinfo.dup
-			@best_card_value_2[index] = @hand_score
+			@best_hand_value_2[index] = @hand_score
 			@combo_name_2[index] = @combo_name.dup
 		end # Ends loop for hand[i]
 
@@ -217,9 +217,9 @@ class ApplicationController < ActionController::Base
 		@tie_1 = Array.new
 		@tie_2 = Array.new
 
-		for i in 0..@best_card_value_1.length-1 do 
+		for i in 0..@best_hand_value_1.length-1 do 
 
-			if @best_card_value_1[i] == @best_card_value_2[i]
+			if @best_hand_value_1[i] == @best_hand_value_2[i]
 
 				# This cannot happen but included to be complete 
 				if @combo_name_1[i][0] == "A Royal Flush"
@@ -372,27 +372,27 @@ class ApplicationController < ActionController::Base
 	def high_card_winner
 
 	 # find high card winner card from numerical representation
-	    for i in 0..@best_card_value_1.length-1 do 
-	      if @best_card_value_1[i] <= 10
-	        @high_card_winner_1[i] = @best_card_value_1[i]
-	      elsif @best_card_value_1[i] == 11
+	    for i in 0..@best_hand_value_1.length-1 do 
+	      if @best_hand_value_1[i] <= 10
+	        @high_card_winner_1[i] = @best_hand_value_1[i]
+	      elsif @best_hand_value_1[i] == 11
 	        @high_card_winner_1[i] = 'J'
-	      elsif @best_card_value_1[i] == 12
+	      elsif @best_hand_value_1[i] == 12
 	        @high_card_winner_1[i] = 'Q'
-	      elsif @best_card_value_1[i] == 13
+	      elsif @best_hand_value_1[i] == 13
 	        @high_card_winner_1[i] = 'K'
-	      elsif @best_card_value_1[i] == 14
+	      elsif @best_hand_value_1[i] == 14
 	        @high_card_winner_1[i] = "A"
 	      end 
-	      if @best_card_value_2[i]<=10
-	        @high_card_winner_2[i] = @best_card_value_2[i]
-	      elsif @best_card_value_2[i] == 11
+	      if @best_hand_value_2[i]<=10
+	        @high_card_winner_2[i] = @best_hand_value_2[i]
+	      elsif @best_hand_value_2[i] == 11
 	        @high_card_winner_2[i] = 'J'
-	      elsif @best_card_value_2[i] == 12
+	      elsif @best_hand_value_2[i] == 12
 	        @high_card_winner_2[i] = 'Q'
-	      elsif @best_card_value_2[i] == 13
+	      elsif @best_hand_value_2[i] == 13
 	        @high_card_winner_2[i] = 'K'
-	      elsif @best_card_value_2[i] == 14
+	      elsif @best_hand_value_2[i] == 14
 	        @high_card_winner_2[i] = "A"
 	      end 
 	    end

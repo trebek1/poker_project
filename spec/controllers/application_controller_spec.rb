@@ -438,13 +438,13 @@ RSpec.describe SimulationsController do
 		@tie_1 = Array.new
 		@tie_2 = Array.new 
 
-		@best_card_value_1 = [20,20] # A pair is a value of 20 
-		@best_card_value_2 = [20,20]
+		@best_hand_value_1 = [20,20] # A pair is a value of 20 
+		@best_hand_value_2 = [20,20]
 		@combo_name_1 = ["A Pair", "A Pair"] 
 		@hand_information_player_1 = [{'pairvals' => [5]},{'pairvals' => [5], 'vals' => [4,4,3]}]
 		@hand_information_player_2 = [{'pairvals' => [3]},{'pairvals' => [5], 'vals' => [4,4,2]}]
-		for i in 0..@best_card_value_1.length-1 do 
-			if @best_card_value_1[i] == @best_card_value_2[i]
+		for i in 0..@best_hand_value_1.length-1 do 
+			if @best_hand_value_1[i] == @best_hand_value_2[i]
 				if @combo_name_1[i] == "A Pair" # Modified @combo_name_1[i][0] to @best[i] for the example 
 					if @hand_information_player_1[i]['pairvals'][0] > @hand_information_player_2[i]['pairvals'][0]
 						@tie_1[i] = @hand_information_player_1[i]['pairvals'][0]
@@ -484,15 +484,15 @@ RSpec.describe SimulationsController do
 		@tie_1 = Array.new
 		@tie_2 = Array.new 
 
-		@best_card_value_1 = [40,40] # A pair is a value of 20 
-		@best_card_value_2 = [40,40]
+		@best_hand_value_1 = [40,40] # A pair is a value of 20 
+		@best_hand_value_2 = [40,40]
 		@combo_name_1 = ["Two Pair", "Two Pair"] 
 		@hand_information_player_1 = [{'pairvals' => [7,6]},{'pairvals' => [7,6], 'vals' => [7,6,3]}]
 		@hand_information_player_2 = [{'pairvals' => [7,5]},{'pairvals' => [7,6], 'vals' => [7,6,2]}]
 
-		for i in 0..@best_card_value_1.length-1 do 
+		for i in 0..@best_hand_value_1.length-1 do 
 
-			if @best_card_value_1[i] == @best_card_value_2[i]
+			if @best_hand_value_1[i] == @best_hand_value_2[i]
 
 				if @combo_name_1[i] == "Two Pair" # Modified for test @best[i][0] in actual program  
 					if @hand_information_player_1[i]['pairvals'].sort[-1] > @hand_information_player_2[i]['pairvals'].sort[-1]
@@ -537,15 +537,15 @@ RSpec.describe SimulationsController do
 		@tie_1 = Array.new
 		@tie_2 = Array.new 
 
-		@best_card_value_1 = [10,10] # A pair is a value of 20 
-		@best_card_value_2 = [10,10]
+		@best_hand_value_1 = [10,10] # A pair is a value of 20 
+		@best_hand_value_2 = [10,10]
 		@combo_name_1 = ["High Card", "High Card"] 
 		@hand_information_player_1 = [{'vals' => [10,5,3]},{ 'vals' => [10,7,6,4,3]}]
 		@hand_information_player_2 = [{'vals' => [10,4,3]},{ 'vals' => [10,7,6,4,2]}]
 	
-	for i in 0..@best_card_value_1.length-1 do 
+	for i in 0..@best_hand_value_1.length-1 do 
 
-			if @best_card_value_1[i] == @best_card_value_2[i]
+			if @best_hand_value_1[i] == @best_hand_value_2[i]
 
 				if @combo_name_1[i] == "High Card" # again modified for test 
 					for k in 1..5 do
@@ -571,12 +571,12 @@ RSpec.describe SimulationsController do
 		@tie_1 = Array.new
 		@tie_2 = Array.new 
 
-		@best_card_value_1 = [500] # A pair is a value of 20 
-		@best_card_value_2 = [500]
+		@best_hand_value_1 = [500] # A pair is a value of 20 
+		@best_hand_value_2 = [500]
 		@combo_name_1 = ["A Straight Flush"]
 		@hand_information_player_1 = [{'vals' => [5,6,7,8,9,10], 'D' => 5}]
 		@hand_information_player_2 = [{'vals' => [6,7,8,9,10,11],'D' => 5}]
-		for i in 0..@best_card_value_1.length-1 do
+		for i in 0..@best_hand_value_1.length-1 do
 			if @hand_information_player_1[i]['H'] == 5 || @hand_information_player_1[i]['S'] == 5 || @hand_information_player_1[i]['D'] == 5 || @hand_information_player_1[i]['C'] == 5  
 				if @combo_name_1[i] == "A Straight Flush" # This line has been modified for testing purposes
 					if @hand_information_player_1[i]['vals'].sort[-1] > @hand_information_player_2[i]['vals'].sort[-1]
@@ -604,12 +604,12 @@ RSpec.describe SimulationsController do
 		@tie_1 = Array.new
 		@tie_2 = Array.new 
 
-		@best_card_value_1 = [400] # A pair is a value of 20 
-		@best_card_value_2 = [400]
+		@best_hand_value_1 = [400] # A pair is a value of 20 
+		@best_hand_value_2 = [400]
 		@combo_name_1 = ["Four of a Kind","Four of a Kind"] 
 		@hand_information_player_1 = [{'vals' => [5,5,5,5,5,10]}]
 		@hand_information_player_2 = [{'vals' => [4,4,4,4,4,11]}]
-		for i in 0..@best_card_value_1.length-1 do 
+		for i in 0..@best_hand_value_1.length-1 do 
 			if @combo_name_1[i] == "Four of a Kind" # This line has been modified for testing purposes
 				if @hand_information_player_1[i]['vals'].mode > @hand_information_player_2[i]['vals'].mode
 					@tie_1[i] = @hand_information_player_1[i]['vals'].mode
@@ -635,13 +635,13 @@ RSpec.describe SimulationsController do
 		@tie_1 = Array.new
 		@tie_2 = Array.new 
 
-		@best_card_value_1 = [50] # A pair is a value of 20 
-		@best_card_value_2 = [50]
+		@best_hand_value_1 = [50] # A pair is a value of 20 
+		@best_hand_value_2 = [50]
 
 		@combo_name_1 = ["Three of a Kind"] 
 		@hand_information_player_1 = [{'vals' => [5,5,5,5,3,10]}]
 		@hand_information_player_2 = [{'vals' => [4,4,4,4,3,11]}]
-		for i in 0..@best_card_value_1.length-1 do 
+		for i in 0..@best_hand_value_1.length-1 do 
 			if @combo_name_1[i] == "Three of a Kind" # This line has been modified for testing purposes
 				if @hand_information_player_1[i]['vals'].mode > @hand_information_player_2[i]['vals'].mode
 					@tie_1[i] = @hand_information_player_1[i]['vals'].mode
@@ -667,13 +667,13 @@ it "Should result in the higher full house winning" do
 		@tie_1 = Array.new
 		@tie_2 = Array.new 
 
-		@best_card_value_1 = [300] # A pair is a value of 20 
-		@best_card_value_2 = [300]
+		@best_hand_value_1 = [300] # A pair is a value of 20 
+		@best_hand_value_2 = [300]
 		
 		@combo_name_1 = ["Full House"] 
 		@hand_information_player_1 = [{'vals' => [5,5,5,5,3,3]}]
 		@hand_information_player_2 = [{'vals' => [4,4,4,4,2,2]}]
-		for i in 0..@best_card_value_1.length-1 do 
+		for i in 0..@best_hand_value_1.length-1 do 
 			if @combo_name_1[i] == "Full House" # This line has been modified for testing purposes
 				if @hand_information_player_1[i]['vals'].mode > @hand_information_player_2[i]['vals'].mode
 					@tie_1[i] = @hand_information_player_1[i]['vals'].mode
@@ -694,13 +694,13 @@ it "Should result in the higher straight winning" do
 		@tie_1 = Array.new
 		@tie_2 = Array.new 
 
-		@best_card_value_1 = [100] # A pair is a value of 20 
-		@best_card_value_2 = [100]
+		@best_hand_value_1 = [100] # A pair is a value of 20 
+		@best_hand_value_2 = [100]
 		
 		@combo_name_1 = ["A Straight"] 
 		@hand_information_player_1 = [{'vals' => [2,3,4,5,6,7], 'max' => 7}]
 		@hand_information_player_2 = [{'vals' => [3,4,5,6,7,8], 'max' => 8}]
-		for i in 0..@best_card_value_1.length-1 do 
+		for i in 0..@best_hand_value_1.length-1 do 
 			if @combo_name_1[i] == "A Straight" # This line has been modified for testing purposes
 				if @hand_information_player_1[i]['max'] > @hand_information_player_2[i]['max']
 					@tie_1[i] = @hand_information_player_1[i]['vals']['max']
@@ -721,13 +721,13 @@ it "Should result in the higher flush winning" do
 		@tie_1 = Array.new
 		@tie_2 = Array.new 
 
-		@best_card_value_1 = [200] # A pair is a value of 20 
-		@best_card_value_2 = [200]
+		@best_hand_value_1 = [200] # A pair is a value of 20 
+		@best_hand_value_2 = [200]
 		
 		@combo_name_1 = ["A Flush"] 
 		@hand_information_player_1 = [{'vals' => [2,3,4,5,6,7], 'max' => 7, 'D' => 5}]
 		@hand_information_player_2 = [{'vals' => [3,4,5,6,7,8], 'max' => 8, 'D' => 5}]
-		for i in 0..@best_card_value_1.length-1 do 
+		for i in 0..@best_hand_value_1.length-1 do 
 			if @combo_name_1[i] == "A Flush" # This line has been modified for testing purposes
 				if @hand_information_player_1[i]['max'] > @hand_information_player_2[i]['max']
 					@tie_1[i] = @hand_information_player_1[i]['vals']['max']
@@ -744,19 +744,19 @@ it "Should result in the higher flush winning" do
 
 it "should keep a numerical value and change the face card to a face card " do
 	
-	@best_card_value_1 = [5, 13]
+	@best_hand_value_1 = [5, 13]
 	@high_card_winner_1 = []
 
-	for i in 0..@best_card_value_1.length-1 do 
-	  if @best_card_value_1[i] <= 10
-	    @high_card_winner_1[i] = @best_card_value_1[i]
-	  elsif @best_card_value_1[i] == 11
+	for i in 0..@best_hand_value_1.length-1 do 
+	  if @best_hand_value_1[i] <= 10
+	    @high_card_winner_1[i] = @best_hand_value_1[i]
+	  elsif @best_hand_value_1[i] == 11
 	    @high_card_winner_1[i] = 'J'
-	  elsif @best_card_value_1[i] == 12
+	  elsif @best_hand_value_1[i] == 12
 	    @high_card_winner_1[i] = 'Q'
-	  elsif @best_card_value_1[i] == 13
+	  elsif @best_hand_value_1[i] == 13
 	    @high_card_winner_1[i] = 'K'
-	  elsif @best_card_value_1[i] == 14
+	  elsif @best_hand_value_1[i] == 14
 	    @high_card_winner_1[i] = "A"
 	  end 
 	end

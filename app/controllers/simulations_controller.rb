@@ -15,8 +15,8 @@ class SimulationsController < ApplicationController
     @hand_information_player_2 = Hash.new
     
     #Store best hand numerical value 
-    @best_card_value_1 = Array.new 
-    @best_card_value_2 = Array.new
+    @best_hand_value_1 = Array.new 
+    @best_hand_value_2 = Array.new
 
     #best hand in card in combo name 
     @combo_name_1 = Array.new
