@@ -742,5 +742,25 @@ it "Should result in the higher flush winning" do
 		expect(@tie_1[0]).to eq 0   
 	end 
 
+it "should keep a numerical value and change the face card to a face card " do
+	
+	@best_card_value_1 = [5, 13]
+	@high_card_winner_1 = []
 
+	for i in 0..@best_card_value_1.length-1 do 
+	  if @best_card_value_1[i] <= 10
+	    @high_card_winner_1[i] = @best_card_value_1[i]
+	  elsif @best_card_value_1[i] == 11
+	    @high_card_winner_1[i] = 'J'
+	  elsif @best_card_value_1[i] == 12
+	    @high_card_winner_1[i] = 'Q'
+	  elsif @best_card_value_1[i] == 13
+	    @high_card_winner_1[i] = 'K'
+	  elsif @best_card_value_1[i] == 14
+	    @high_card_winner_1[i] = "A"
+	  end 
+	end
+	expect(@high_card_winner_1[0]).to eq 5
+	expect(@high_card_winner_1[1]).to eq 'K'
+	end   	
 end # end spec (controller)
