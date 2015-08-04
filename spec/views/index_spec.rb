@@ -3,12 +3,12 @@ require "rails_helper"
 RSpec.describe 'views/simulations/index.html.erb' do
 
 	it "expects wins in increment given a win (player 1)" do
-		@top1 = [10]
-		@top2 = [5]
-		@wins1 = 0
-		if @top1[0] > @top2[0]
-			@wins1+=1 
+		@best_card_value_1 = [10]
+		@best_card_value_2 = [5]
+		@wins_1 = 0
+		if @best_card_value_1[0] > @best_card_value_2[0]
+			@wins_1+=1 
 		end 
-		expect(@wins1).to eql 1
+		expect(@wins_1).to eql 1
 	end 
 end 	

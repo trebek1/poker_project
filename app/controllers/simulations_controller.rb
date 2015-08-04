@@ -1,82 +1,59 @@
 class SimulationsController < ApplicationController
   def index
   	# Data from file removing dashes and making into 10 piece increments so that each one is a "hand" for either player 1 or 2 
-    @data = File.read("poker.txt").gsub(/\s+/, "").scan(/.{10}/) 
+    data = File.read("poker.txt").gsub(/\s+/, "").scan(/.{10}/) 
   	
     # info about the given hand in the hand_results function
     @info = Hash.new 
 
-    # object with all info for all hands (for given player) in hand results function   
+     # object with all info for all hands (for given player) in hand results function   
     @eachinfo = Hash.new 
 
     # player 1 and player 2 hands arrays (just the cards from the file)
-    @hands1 = Array.new 
-  	@hands2 = Array.new
+    @hands_for_player_1 = Array.new 
+  	@hands_for_player_2 = Array.new
   	
     #player hands with calculated information about combinations
-    @player1hands = Hash.new 
-    @player2hands = Hash.new
+    @hand_information_player_1 = Hash.new 
+    @hand_information_player_2 = Hash.new
     
     #Store best hand numerical value 
-    @top1 = Array.new 
-    @top2 = Array.new
+    @best_card_value_1 = Array.new 
+    @best_card_value_2 = Array.new
 
-    #best hand in card value 
-    @best1 = Array.new
-    @best2 = Array.new    
+    #best hand in card in combo name 
+    @combo_name_1 = Array.new
+    @combo_name_2 = Array.new    
 
     #number of wins for player 1 and player 2 
-    @wins1 = 0
-    @wins2 = 0
+    @wins_1 = 0
+    @wins_2 = 0
 
-    # Stores the high card name instead of the number for numbers > 9 
-    @highcardwinner1 = Array.new 
-    @highcardwinner2 = Array.new
+    # Stores the high card name instead of the number for numbers > 10
+    @high_card_winner_1 = Array.new 
+    @high_card_winner_2 = Array.new
 
     # Splits the hands between player 1 and 2 
-    @data.each_with_index do |data,index|
-  		if index % 2 === 0 
-  			@hands1.push(data)
+    data.each_with_index do |data,index|
+  		if index % 2 == 0 
+  			@hands_for_player_1.push(data)
   		else 
-  			@hands2.push(data) 
+  			@hands_for_player_2.push(data) 
   		end 
   	end # Ends loop to push players their hands 
    
    # Evaluate player 1
-    @hands1.each_with_index do |hand,index|
+    @hands_for_player_1.each_with_index do |hand,index|
       hand_results(hand,index,1)      
     end 
     # Evaluate player 2 
-    @hands2.each_with_index do |hand,index|
+    @hands_for_player_2.each_with_index do |hand,index|
       hand_results(hand,index,2)  
     end 
 
-    # find high card winner card from numerical representation
-    for i in 0..@top1.length-1 do 
-      if @top1[i] <= 10
-        @highcardwinner1[i] = @top1[i]
-      elsif @top1[i] == 11
-        @highcardwinner1[i] = 'J'
-      elsif @top1[i] == 12
-        @highcardwinner1[i] = 'Q'
-      elsif @top1[i] == 13
-        @highcardwinner1[i] = 'K'
-      elsif @top1[i] == 14
-        @highcardwinner1[i] = "A"
-      end 
-      if @top2[i]<=10
-        @highcardwinner2[i] = @top2[i]
-      elsif @top2[i] == 11
-        @highcardwinner2[i] = 'J'
-      elsif @top2[i] == 12
-        @highcardwinner2[i] = 'Q'
-      elsif @top2[i] == 13
-        @highcardwinner2[i] = 'K'
-      elsif @top2[i] == 14
-        @highcardwinner2[i] = "A"
-      end 
-    end
-    # run tie winner to get a result when there is a tie 
-    tie_winner  
+   #find the best card to display when high card wins (A for 14, K for 13 etc)
+   high_card_winner
+   # run tie winner to get a result when there is a tie 
+   tie_winner  
   end 
 end

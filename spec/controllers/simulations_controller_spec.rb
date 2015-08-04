@@ -8,52 +8,52 @@ RSpec.describe SimulationsController do
   end 	
 
 	it "Should create a new hash" do
-  	@player1hands = Hash.new 
+  	@hand_information_player_1 = Hash.new 
    	Hash.new.should == {}
   end 
 
 	it "Should create a new array" do
-  	@hands1 = Array.new 
+  	@hands_for_player_1 = Array.new 
    	Array.new.should == []
   end 
 
   it "should equal zero when set to zero" do 
-   	@wins1 = 0
-   	@wins1.should eql(0)
+   	@wins_1 = 0
+   	@wins_1.should eql(0)
   end 
 
  	it "hands 1 and 2 should be half the size (1000) as the file" do 
    	data = File.read("poker.txt").gsub(/\s+/, "").scan(/.{10}/)
-	  @hands1 = Array.new
-	  @hands2 = Array.new
+	  @hands_for_player_1 = Array.new
+	  @hands_for_player_2 = Array.new
    	data.each_with_index do |data,index|
-  		if index % 2 === 0 
-  			@hands1.push(data)
+  		if index % 2 == 0 
+  			@hands_for_player_1.push(data)
   		else 
-  			@hands2.push(data) 
+  			@hands_for_player_2.push(data) 
   		end
 		end  
-	  expect(@hands2.length).to equal 1000 # if hands 2 = 1000 hands 1 must also equal 1000
+	  expect(@hands_for_player_2.length).to equal 1000 # if hands 2 = 1000 hands 1 must also equal 1000
 	end
 
   it "should keep a numerical value and change the face card to a face card " do
-    @top1 = [5, 13]
-    @highcardwinner1 = []
+    @best_card_value_1 = [5, 13]
+    @high_card_winner_1 = []
     
-    for i in 0..@top1.length-1 do 
-      if @top1[i] <= 10
-        @highcardwinner1[i] = @top1[i]
-      elsif @top1[i] == 11
-        @highcardwinner1[i] = 'J'
-      elsif @top1[i] == 12
-        @highcardwinner1[i] = 'Q'
-      elsif @top1[i] == 13
-        @highcardwinner1[i] = 'K'
-      elsif @top1[i] == 14
-        @highcardwinner1[i] = "A"
+    for i in 0..@best_card_value_1.length-1 do 
+      if @best_card_value_1[i] <= 10
+        @high_card_winner_1[i] = @best_card_value_1[i]
+      elsif @best_card_value_1[i] == 11
+        @high_card_winner_1[i] = 'J'
+      elsif @best_card_value_1[i] == 12
+        @high_card_winner_1[i] = 'Q'
+      elsif @best_card_value_1[i] == 13
+        @high_card_winner_1[i] = 'K'
+      elsif @best_card_value_1[i] == 14
+        @high_card_winner_1[i] = "A"
       end 
     end
-    expect(@highcardwinner1[0]).to eq 5
-    expect(@highcardwinner1[1]).to eq 'K'
+    expect(@high_card_winner_1[0]).to eq 5
+    expect(@high_card_winner_1[1]).to eq 'K'
   end   	 
 end 
