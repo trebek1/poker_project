@@ -2,13 +2,13 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
  
-  	# note that each time the function hand_results runs, we are only looking at one hand, with one index and one player 
-
+  	# note that each time the function hand_results runs, we are only looking at one hand, with one index and one player  
 	def hand_results (hand,index,player)
 
 		max=0 # Set the max value to zero in order to help find the high card for the hand 
 
 		# create an array to store the values of each card in a hand 
+		#stores the data in the @info object 
 		vals = Array.new
 		hand.chars.each_with_index do |card, char|	
 			
@@ -62,15 +62,16 @@ class ApplicationController < ActionController::Base
 				@info['vals'] = vals 
 			end		
 		end
-		# initialize combos in object for given hand 
-		@info['pair']  = 0   # make value = 20 
-		@info['3kind'] = 0   # make value = 50
-		@info['straight'] = 0 # make value = 100
-		@info['flush'] = 0   # make value = 200 
-		@info['house'] = 0 # make value = 300
-		@info['4kind'] = 0 # make value = 400
-		@info['sflush'] = 0 # make value = 500
-		@info['Royal'] = 0 # make value = 600
+		# initialize combos in object for given hand
+
+		@info['pair']  = 0   # make hand score = 20 
+		@info['3kind'] = 0   # make hand score = 50
+		@info['straight'] = 0 # make hand score = 100
+		@info['flush'] = 0   # make hand score = 200 
+		@info['house'] = 0 # make hand score = 300
+		@info['4kind'] = 0 # make hand score = 400
+		@info['sflush'] = 0 # make hand score = 500
+		@info['Royal'] = 0 # make hand score = 600
 		@info['pairvals'] = Array.new 
 
 		# initialize max to save the best combination from the hand 
@@ -80,16 +81,17 @@ class ApplicationController < ActionController::Base
 		# test for whether or not the hand has a combo an set it a numerical value for comparison
 		@info.each do |key,val|
 			# since we are only looking at the key once we could have either a pair or 3 of a kind 
-			if @info[key] ==2 || @info[key] == 3
+			if @info[key] == 2 || @info[key] == 3
 				# if 3 of a kind, we dont want to test for pair so we look for 3kind first 
 				if @info[key] == 3 && key != 'H' && key != 'S' && key != 'D' && key != 'C' && key != 'max' && key != 'pair'
 					@info['3kind'] =1
 					# see if 3kind is best hand, if so make max value 
 					if @hand_score < 50
 						@hand_score = 50
-					end 
-					# test for pair if not a 3 of a kind 
-				elsif @info[key] == 2 && key != 'H' && key != 'C' && key != 'max' && key != 'S' && key != 'D' && key != 'pair'
+					end
+				end  
+				# test for pair 
+				if @info[key] == 2 && key != 'H' && key != 'C' && key != 'max' && key != 'S' && key != 'D' && key != 'pair'
 					@info['pair'] +=1
 					@info['pairvals'].push key.to_i 
 					# see if pair is best hand, if so, set max to value 
@@ -97,9 +99,16 @@ class ApplicationController < ActionController::Base
 						@hand_score = 20*@info['pair']
 					end 
 				end
+				# if we have both a 3 of a kind and a pair we have a full house 
+				if @info['3kind'] == 1 && @info['pair'] == 1
+				   @info['house'] = 1
+					if @hand_score < 300
+				   		@hand_score = 300
+					end
+				end 	
 			end 
 			# find 4 of a kind without triggering 4 of a kind on a suit count
-			if @info[key] ==4 && key!= 'H' && key!= 'S' && key!='D' && key!='C' && key!= 'max' 
+			if @info[key] == 4 && key!= 'H' && key!= 'S' && key!='D' && key!='C' && key!= 'max' 
 				@info['4kind'] = 1
 				@hand_score = 400 
 			end
@@ -122,8 +131,8 @@ class ApplicationController < ActionController::Base
 			if @info['H'] == 5 || @info['S'] == 5 || @info['D'] == 5 || @info['C'] == 5 
 				# if those five cards are the highest five we have royal flush
 				if @info['K'] == 1 && @info['Q'] == 1 && @info['J'] == 1 && @info['A'] == 1 && @info['T'] == 1 
-				@info['Royal'] = 1
-				@hand_score = 600
+					@info['Royal'] = 1
+					@hand_score = 600
 				#if those 5 cards are not the highest, but are in order we have a straight flush 
 				elsif @info['A'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 ||
 					  @info['6'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
@@ -137,17 +146,10 @@ class ApplicationController < ActionController::Base
 				@info['sflush'] = 1	
 				@hand_score = 500
 				else 
-				#if the cards are just the same color but not in order we have a regular flush 
-				@info['flush'] = 1 
-				@hand_score = 200		 
+					#if the cards are just the same color but not in order we have a regular flush 
+					@info['flush'] = 1 
+					@hand_score = 200		 
 				end	
-			end 	
-			# if we have both a 3 of a kind and a pair we have a full house 
-			if @info['3kind'] == 1 && @info['pair'] == 1
-			   @info['house'] = 1
-				if @hand_score < 300
-			   		@hand_score = 300
-				end
 			end 	
 		end # end loop, now a whole hand has been evaluated 
 
@@ -199,6 +201,7 @@ class ApplicationController < ActionController::Base
 
 	end # ends loop for function 
 
+	# Finds the winner if there is a tie, else stores 0
 	def tie_winner 
 		# Store the winner information if there is a tie for player 1 and 2 
 		@tie_1 = Array.new
@@ -278,7 +281,7 @@ class ApplicationController < ActionController::Base
 						@tie_2[i] = @hand_information_player_2[i]['max']
 					end 
 				end 
-				# find winner with same high card. Itterate through all 5 cards until one is bigger 
+				# find winner with same high card. Itterate through all 5 cards until one is bigger (in order from highest)
 				if @combo_name_1[i][0] == "High Card"
 					for k in 1..5 do
 						if @hand_information_player_1[i]['vals'].sort[-k] > @hand_information_player_2[i]['vals'].sort[-k]
@@ -291,45 +294,6 @@ class ApplicationController < ActionController::Base
 							break
 						end 
 					end 
-					# if @hand_information_player_1[i]['vals'].sort[-1] > @hand_information_player_2[i]['vals'].sort[-1]
-					# 	@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-1]
-					# 	@tie_2[i] = 0
-					# elsif @hand_information_player_1[i]['vals'].sort[-1] < @hand_information_player_2[i]['vals'].sort[-1]
-					# 	@tie_1[i] = 0
-					# 	@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-1]
-					# elsif @hand_information_player_1[i]['vals'].sort[-1] == @hand_information_player_2[i]['vals'].sort[-1]
-					# 	if @hand_information_player_1[i]['vals'].sort[-2] > @hand_information_player_2[i]['vals'].sort[-2]
-					# 		@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-2]
-					# 		@tie_2[i] = 0
-					# 	elsif @hand_information_player_1[i]['vals'].sort[-2] < @hand_information_player_2[i]['vals'].sort[-2]
-					# 		@tie_1[i] = 0
-					# 		@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-2]
-					# 	elsif @hand_information_player_1[i]['vals'].sort[-2] == @hand_information_player_2[i]['vals'].sort[-2]
-					# 		if @hand_information_player_1[i]['vals'].sort[-3] > @hand_information_player_2[i]['vals'].sort[-3]
-					# 			@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-3]
-					# 			@tie_2[i] = 0
-					# 		elsif @hand_information_player_1[i]['vals'].sort[-3] < @hand_information_player_2[i]['vals'].sort[-3]
-					# 			@tie_1[i] = 0
-					# 			@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-3]
-					# 		elsif @hand_information_player_1[i]['vals'].sort[-3] == @hand_information_player_2[i]['vals'].sort[-3]
-					# 			if @hand_information_player_1[i]['vals'].sort[-4] > @hand_information_player_2[i]['vals'].sort[-4]
-					# 				@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-4]
-					# 				@tie_2[i] = 0
-					# 			elsif @hand_information_player_1[i]['vals'].sort[-4] < @hand_information_player_2[i]['vals'].sort[-4]
-					# 				@tie_1[i] = 0
-					# 				@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-4]
-					# 			elsif @hand_information_player_1[i]['vals'].sort[-4] == @hand_information_player_2[i]['vals'].sort[-4]
-					# 				if @hand_information_player_1[i]['vals'].sort[-5 ] > @hand_information_player_2[i]['vals'].sort[-5]
-					# 					@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-5]
-					# 					@tie_2[i] = 0
-					# 				elsif @hand_information_player_1[i]['vals'].sort[-5] < @hand_information_player_2[i]['vals'].sort[-5]
-					# 					@tie_1[i] = 0
-					# 					@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-5]
-					# 				end
-					# 			end
-					# 		end
-					# 	end
-					# end
 				end
 				# find winner with same two pairs. First check each of the pair values (high to low) then check
 				# the remaining cards high to low 
@@ -358,25 +322,7 @@ class ApplicationController < ActionController::Base
 									@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-k]
 									break
 								end 
-							end 
-
-							# elsif @hand_information_player_1[i]['vals'].sort[-1] == @hand_information_player_2[i]['vals'].sort[-1]
-							# 	if @hand_information_player_1[i]['vals'].sort[-2] > @hand_information_player_2[i]['vals'].sort[-2]
-							# 		@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-2]
-							# 		@tie_2[i] = 0
-							# 	elsif @hand_information_player_1[i]['vals'].sort[-2] < @hand_information_player_2[i]['vals'].sort[-2]
-							# 		@tie_1[i] = 0
-							# 		@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-2]
-							# 	elsif @hand_information_player_1[i]['vals'].sort[-2] == @hand_information_player_2[i]['vals'].sort[-2]
-							# 		if @hand_information_player_1[i]['vals'].sort[-3] > @hand_information_player_2[i]['vals'].sort[-3]
-							# 			@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-3]
-							# 			@tie_2[i] = 0
-							# 		elsif @hand_information_player_1[i]['vals'].sort[-3] < @hand_information_player_2[i]['vals'].sort[-3]
-							# 			@tie_1[i] = 0
-							# 			@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-3]
-							# 		end 
-							# 	end
-							# end
+							end
 						end
 					end
 				end  
@@ -401,38 +347,6 @@ class ApplicationController < ActionController::Base
 								break
 							end 
 						end 
-						
-						# if @hand_information_player_1[i]['vals'].sort[-1] > @hand_information_player_2[i]['vals'].sort[-1]
-						# 	@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-1]
-						# 	@tie_2[i] = 0
-						# elsif @hand_information_player_1[i]['vals'].sort[-1] < @hand_information_player_2[i]['vals'].sort[-1]
-						# 	@tie_1[i] = 0
-						# 	@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-1]
-						# elsif @hand_information_player_1[i]['vals'].sort[-1] == @hand_information_player_2[i]['vals'].sort[-1]
-						# 	if @hand_information_player_1[i]['vals'].sort[-2] > @hand_information_player_2[i]['vals'].sort[-2]
-						# 		@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-2]
-						# 		@tie_2[i] = 0
-						# 	elsif @hand_information_player_1[i]['vals'].sort[-2] < @hand_information_player_2[i]['vals'].sort[-2]
-						# 		@tie_1[i] = 0
-						# 		@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-2]
-						# 	elsif @hand_information_player_1[i]['vals'].sort[-2] == @hand_information_player_2[i]['vals'].sort[-2]
-						# 		if @hand_information_player_1[i]['vals'].sort[-3] > @hand_information_player_2[i]['vals'].sort[-3]
-						# 			@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-3]
-						# 			@tie_2[i] = 0
-						# 		elsif @hand_information_player_1[i]['vals'].sort[-3] < @hand_information_player_2[i]['vals'].sort[-3]
-						# 			@tie_1[i] = 0
-						# 			@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-3]
-						# 		elsif @hand_information_player_1[i]['vals'].sort[-3] == @hand_information_player_2[i]['vals'].sort[-3]
-						# 			if @hand_information_player_1[i]['vals'].sort[-4] > @hand_information_player_2[i]['vals'].sort[-4]
-						# 				@tie_1[i] = @hand_information_player_1[i]['vals'].sort[-4]
-						# 				@tie_2[i] = 0
-						# 			elsif @hand_information_player_1[i]['vals'].sort[-4] < @hand_information_player_2[i]['vals'].sort[-4]
-						# 				@tie_1[i] = 0
-						# 				@tie_2[i] = @hand_information_player_2[i]['vals'].sort[-4]
-						# 			end
-						# 		end
-						# 	end
-						# end
 					end
 				end 
 			else 

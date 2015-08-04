@@ -2,8 +2,6 @@
 
 <div class = "row">
 	<div class = "col-xs-3" style="background-color: HoneyDew; margin: 20px">
-	 		
-	 		
 	<% for i in 0..@hands_for_player_1.length-1 do %>
 		<br>
 		<div> This is round <%= i+1 %> </div>
@@ -12,10 +10,9 @@
 		Player 1's Hand is <%=@hands_for_player_1[i][0] + @hands_for_player_1[i][1] + "," + @hands_for_player_1[i][2] + @hands_for_player_1[i][3] + "," + @hands_for_player_1[i][4] + @hands_for_player_1[i][5] + "," + @hands_for_player_1[i][6] + @hands_for_player_1[i][7] + ","+ @hands_for_player_1[i][8] + @hands_for_player_1[i][9] %> <br>
 		Player 2's Hand is <%=@hands_for_player_2[i][0] + @hands_for_player_2[i][1] + "," + @hands_for_player_2[i][2] + @hands_for_player_2[i][3] + "," + @hands_for_player_2[i][4] + @hands_for_player_2[i][5] + "," + @hands_for_player_2[i][6] + @hands_for_player_2[i][7] + ","+ @hands_for_player_2[i][8] + @hands_for_player_2[i][9] %> <br>
 		<br> 
-
 		<% if @best_card_value_1[i] > @best_card_value_2[i] %>
 			<% @wins_1+=1 %> 
-			<% if @wins_1 == 0 %>
+			<% if @wins_1 == 1 %>
 				<div>Player 1 is the winner with <%=@combo_name_1[i][0]%> </div>
 				<% if @combo_name_1[i][0] == 'High Card' %>
 					<div> The high card is <%= @high_card_winner_1[i] %>
@@ -42,7 +39,7 @@
 			<%end%> 
 		<% elsif @best_card_value_1[i] < @best_card_value_2[i] %> 
 			<% @wins_2+=1 %> 
-			<% if @wins_2 == 0 %>
+			<% if @wins_2 == 1 %>
 				<div>Player 2 is the winner with <%=@combo_name_2[i][0]%> </div>
 				<% if @combo_name_2[i][0] == 'High Card' %>
 					<div> The high card is <%= @high_card_winner_2[i] %>
