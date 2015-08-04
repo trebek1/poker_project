@@ -197,7 +197,7 @@ class ApplicationController < ActionController::Base
 		@eachinfo[index] = info
 			
 		if player == 1
-			# objects passed by reference while numbers are not 
+			# hashes passed by reference while numbers are not 
 			# once we loop through all the hands we want all of them to be accessable in the hand info for the player
 			# This will allow us to pull the information into the view 
 			@hand_information_player_1 = @eachinfo.dup
