@@ -4,7 +4,7 @@ class SimulationsController < ApplicationController
     data = File.read("poker.txt").gsub(/\s+/, "").scan(/.{10}/) 
   	
     # info about the given hand in the hand_results function
-    @info = Hash.new 
+    #info = Hash.new 
 
      # object with all info for all hands (for given player) in hand results function   
     @eachinfo = Hash.new 

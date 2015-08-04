@@ -7,18 +7,23 @@ class ApplicationController < ActionController::Base
 
 		max=0 # Set the max value to zero in order to help find the high card for the hand 
 
+		#initialize a new hash to save the hand into including combinations and individual counts 
+		info = Hash.new
+
 		# create an array to store the values of each card in a hand 
-		#stores the data in the @info object 
+		#stores the data in the info object 
 		vals = Array.new
+
+		#Evaluate hand 
 		hand.chars.each_with_index do |card, char|	
 			
 			# Go through each card and add to a hash for analysis 
-			if  	@info[card] == nil
-					@info[card] = 1
+			if  	info[card] == nil
+					info[card] = 1
 			else
-					@info[card]+=1
+					info[card]+=1
 			end   
-
+			# Find the largest value in the hand and find all values in the hand 
 			if char %2 == 0  # First character is the number (starting index 0)
 				# find max high card 
 				if card == 'A' # Make all cards comparable values including facecards 
@@ -56,98 +61,101 @@ class ApplicationController < ActionController::Base
 					end 
 				end
 			end
+
 			#After the last card, push max to the array 
 			if char == 9
-				@info['max'] = max
-				@info['vals'] = vals 
+				info['max'] = max
+				info['vals'] = vals 
 			end		
 		end
 		# initialize combos in object for given hand
 
-		@info['pair']  = 0   # make hand score = 20 
-		@info['3kind'] = 0   # make hand score = 50
-		@info['straight'] = 0 # make hand score = 100
-		@info['flush'] = 0   # make hand score = 200 
-		@info['house'] = 0 # make hand score = 300
-		@info['4kind'] = 0 # make hand score = 400
-		@info['sflush'] = 0 # make hand score = 500
-		@info['Royal'] = 0 # make hand score = 600
-		@info['pairvals'] = Array.new 
+		info['pair']  = 0   # make hand score = 20 
+		info['3kind'] = 0   # make hand score = 50
+		info['straight'] = 0 # make hand score = 100
+		info['flush'] = 0   # make hand score = 200 
+		info['house'] = 0 # make hand score = 300
+		info['4kind'] = 0 # make hand score = 400
+		info['sflush'] = 0 # make hand score = 500
+		info['Royal'] = 0 # make hand score = 600
+		info['pairvals'] = Array.new 
 
+		#Find combinations to find winner 
 		# initialize max to save the best combination from the hand 
 		@hand_score = 0
 		# initialize variable to save the name for the winning hand 
 		@combo_name = []
 		# test for whether or not the hand has a combo an set it a numerical value for comparison
-		@info.each do |key,val|
+		info.each do |key,val|
 			# since we are only looking at the key once we could have either a pair or 3 of a kind 
-			if @info[key] == 2 || @info[key] == 3
+			if info[key] == 2 || info[key] == 3
 				# if 3 of a kind, we dont want to test for pair so we look for 3kind first 
-				if @info[key] == 3 && key != 'H' && key != 'S' && key != 'D' && key != 'C' && key != 'max' && key != 'pair'
-					@info['3kind'] =1
+				if info[key] == 3 && key != 'H' && key != 'S' && key != 'D' && key != 'C' && key != 'max' && key != 'pair'
+					info['3kind'] =1
 					# see if 3kind is best hand, if so make max value 
 					if @hand_score < 50
 						@hand_score = 50
 					end
 				end  
 				# test for pair 
-				if @info[key] == 2 && key != 'H' && key != 'C' && key != 'max' && key != 'S' && key != 'D' && key != 'pair'
-					@info['pair'] +=1
-					@info['pairvals'].push key.to_i 
+				if info[key] == 2 && key != 'H' && key != 'C' && key != 'max' && key != 'S' && key != 'D' && key != 'pair'
+					info['pair'] +=1
+					info['pairvals'].push key.to_i 
 					# see if pair is best hand, if so, set max to value 
-					if @hand_score < 20*@info['pair']
-						@hand_score = 20*@info['pair']
+					if @hand_score < 20*info['pair']
+						@hand_score = 20*info['pair']
 					end 
 				end
 				# if we have both a 3 of a kind and a pair we have a full house 
-				if @info['3kind'] == 1 && @info['pair'] == 1
-				   @info['house'] = 1
+				if info['3kind'] == 1 && info['pair'] == 1
+				   info['house'] = 1
 					if @hand_score < 300
 				   		@hand_score = 300
 					end
 				end 	
 			end 
 			# find 4 of a kind without triggering 4 of a kind on a suit count
-			if @info[key] == 4 && key!= 'H' && key!= 'S' && key!='D' && key!='C' && key!= 'max' 
-				@info['4kind'] = 1
+			#Node info[key] is the count for a particular card type or value 
+			if info[key] == 4 && key!= 'H' && key!= 'S' && key!='D' && key!='C' && key!= 'max' 
+				info['4kind'] = 1
 				@hand_score = 400 
 			end
 			
-			# if all five cards are in a row we have a straight 	
-			if 	  @info['A'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 ||
-				  @info['6'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
-				  @info['6'] == 1 && @info['7'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
-				  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
-				  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['5'] ==1 || 
-				  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
-				  @info['J'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
-				  @info['J'] == 1 && @info['Q'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
-				  @info['J'] == 1 && @info['Q'] == 1 && @info['K'] == 1 && @info['9'] == 1 && @info['T'] ==1
-				@info['straight'] =1
+			# if all five cards are in a row we have a straight (looking at the object itterate through straight options) 	
+			if 	  info['A'] == 1 && info['2'] == 1 && info['3'] == 1 && info['4'] == 1 && info['5'] ==1 ||
+				  info['6'] == 1 && info['2'] == 1 && info['3'] == 1 && info['4'] == 1 && info['5'] ==1 || 
+				  info['6'] == 1 && info['7'] == 1 && info['3'] == 1 && info['4'] == 1 && info['5'] ==1 || 
+				  info['6'] == 1 && info['7'] == 1 && info['8'] == 1 && info['4'] == 1 && info['5'] ==1 || 
+				  info['6'] == 1 && info['7'] == 1 && info['8'] == 1 && info['9'] == 1 && info['5'] ==1 || 
+				  info['6'] == 1 && info['7'] == 1 && info['8'] == 1 && info['9'] == 1 && info['T'] ==1 || 
+				  info['J'] == 1 && info['7'] == 1 && info['8'] == 1 && info['9'] == 1 && info['T'] ==1 || 
+				  info['J'] == 1 && info['Q'] == 1 && info['8'] == 1 && info['9'] == 1 && info['T'] ==1 || 
+				  info['J'] == 1 && info['Q'] == 1 && info['K'] == 1 && info['9'] == 1 && info['T'] ==1
+				info['straight'] =1
 				@hand_score = 100 	
 			end
 
 			#if all five cards are one suit we have a flush 
-			if @info['H'] == 5 || @info['S'] == 5 || @info['D'] == 5 || @info['C'] == 5 
+			if info['H'] == 5 || info['S'] == 5 || info['D'] == 5 || info['C'] == 5 
 				# if those five cards are the highest five we have royal flush
-				if @info['K'] == 1 && @info['Q'] == 1 && @info['J'] == 1 && @info['A'] == 1 && @info['T'] == 1 
-					@info['Royal'] = 1
+				if info['K'] == 1 && info['Q'] == 1 && info['J'] == 1 && info['A'] == 1 && info['T'] == 1 
+					info['Royal'] = 1
 					@hand_score = 600
 				#if those 5 cards are not the highest, but are in order we have a straight flush 
-				elsif @info['A'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 ||
-					  @info['6'] == 1 && @info['2'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
-					  @info['6'] == 1 && @info['7'] == 1 && @info['3'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
-					  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['4'] == 1 && @info['5'] ==1 || 
-					  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['5'] ==1 || 
-					  @info['6'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
-					  @info['J'] == 1 && @info['7'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
-					  @info['J'] == 1 && @info['Q'] == 1 && @info['8'] == 1 && @info['9'] == 1 && @info['T'] ==1 || 
-					  @info['J'] == 1 && @info['Q'] == 1 && @info['K'] == 1 && @info['9'] == 1 && @info['T'] ==1
-				@info['sflush'] = 1	
+				elsif info['A'] == 1 && info['2'] == 1 && info['3'] == 1 && info['4'] == 1 && info['5'] ==1 ||
+					  info['6'] == 1 && info['2'] == 1 && info['3'] == 1 && info['4'] == 1 && info['5'] ==1 || 
+					  info['6'] == 1 && info['7'] == 1 && info['3'] == 1 && info['4'] == 1 && info['5'] ==1 || 
+					  info['6'] == 1 && info['7'] == 1 && info['8'] == 1 && info['4'] == 1 && info['5'] ==1 || 
+					  info['6'] == 1 && info['7'] == 1 && info['8'] == 1 && info['9'] == 1 && info['5'] ==1 || 
+					  info['6'] == 1 && info['7'] == 1 && info['8'] == 1 && info['9'] == 1 && info['T'] ==1 || 
+					  info['J'] == 1 && info['7'] == 1 && info['8'] == 1 && info['9'] == 1 && info['T'] ==1 || 
+					  info['J'] == 1 && info['Q'] == 1 && info['8'] == 1 && info['9'] == 1 && info['T'] ==1 || 
+					  info['J'] == 1 && info['Q'] == 1 && info['K'] == 1 && info['9'] == 1 && info['T'] ==1
+				info['sflush'] = 1	
 				@hand_score = 500
 				else 
 					#if the cards are just the same color but not in order we have a regular flush 
-					@info['flush'] = 1 
+					info['flush'] = 1 
 					@hand_score = 200		 
 				end	
 			end 	
@@ -155,8 +163,8 @@ class ApplicationController < ActionController::Base
 
 		# Once the whole hand has been evaluated, if there are no combos then max should be zero
 		# make max equal to the high card 
-		if @info['max'] > @hand_score
-			@hand_score = @info['max']
+		if info['max'] > @hand_score
+			@hand_score = info['max']
 		end 
 		# calculate the actual name for the winning hand from numerical value 
 		if @hand_score < 20
@@ -183,21 +191,20 @@ class ApplicationController < ActionController::Base
 
 	    # save the info to the index of the array of hands 
 	    # This will give us an array with all of the players hand information in it at the end 
-		@eachinfo[index] = @info
+		@eachinfo[index] = info
 			
 		if player == 1
 			# objects passed by reference while numbers are not 
+			# once we loop through all the hands we want all of them to be accessable in the hand info for the player
+			# This will allow us to pull the information into the view 
 			@hand_information_player_1 = @eachinfo.dup
-			@best_card_value_1[index] = @hand_score
+			@best_card_value_1[index] = @hand_score # Could use max but we use best_card_value for clarity 
 			@combo_name_1[index] = @combo_name.dup
 		elsif player == 2  
 			@hand_information_player_2 = @eachinfo.dup
 			@best_card_value_2[index] = @hand_score
 			@combo_name_2[index] = @combo_name.dup
 		end # Ends loop for hand[i]
-
-		#initialize a new hash for the next loop
-		@info = Hash.new
 
 	end # ends loop for function 
 
@@ -359,35 +366,33 @@ class ApplicationController < ActionController::Base
 
 	end # ends the tie function 
 
-def high_card_winner
+	def high_card_winner
 
- # find high card winner card from numerical representation
-    for i in 0..@best_card_value_1.length-1 do 
-      if @best_card_value_1[i] <= 10
-        @high_card_winner_1[i] = @best_card_value_1[i]
-      elsif @best_card_value_1[i] == 11
-        @high_card_winner_1[i] = 'J'
-      elsif @best_card_value_1[i] == 12
-        @high_card_winner_1[i] = 'Q'
-      elsif @best_card_value_1[i] == 13
-        @high_card_winner_1[i] = 'K'
-      elsif @best_card_value_1[i] == 14
-        @high_card_winner_1[i] = "A"
-      end 
-      if @best_card_value_2[i]<=10
-        @high_card_winner_2[i] = @best_card_value_2[i]
-      elsif @best_card_value_2[i] == 11
-        @high_card_winner_2[i] = 'J'
-      elsif @best_card_value_2[i] == 12
-        @high_card_winner_2[i] = 'Q'
-      elsif @best_card_value_2[i] == 13
-        @high_card_winner_2[i] = 'K'
-      elsif @best_card_value_2[i] == 14
-        @high_card_winner_2[i] = "A"
-      end 
-    end
-end 
-
-
+	 # find high card winner card from numerical representation
+	    for i in 0..@best_card_value_1.length-1 do 
+	      if @best_card_value_1[i] <= 10
+	        @high_card_winner_1[i] = @best_card_value_1[i]
+	      elsif @best_card_value_1[i] == 11
+	        @high_card_winner_1[i] = 'J'
+	      elsif @best_card_value_1[i] == 12
+	        @high_card_winner_1[i] = 'Q'
+	      elsif @best_card_value_1[i] == 13
+	        @high_card_winner_1[i] = 'K'
+	      elsif @best_card_value_1[i] == 14
+	        @high_card_winner_1[i] = "A"
+	      end 
+	      if @best_card_value_2[i]<=10
+	        @high_card_winner_2[i] = @best_card_value_2[i]
+	      elsif @best_card_value_2[i] == 11
+	        @high_card_winner_2[i] = 'J'
+	      elsif @best_card_value_2[i] == 12
+	        @high_card_winner_2[i] = 'Q'
+	      elsif @best_card_value_2[i] == 13
+	        @high_card_winner_2[i] = 'K'
+	      elsif @best_card_value_2[i] == 14
+	        @high_card_winner_2[i] = "A"
+	      end 
+	    end
+	end 
   protect_from_forgery with: :exception
 end
