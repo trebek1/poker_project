@@ -8,7 +8,7 @@ class SimulationsController < ApplicationController
 
     # player 1 and player 2 hands arrays (just the cards from the file)
     @hands_for_player_1 = Array.new 
-  	@hands_for_player_2 = Array.new
+    @hands_for_player_2 = Array.new
   	
     #player hands with calculated information about combinations
     @hand_information_player_1 = Hash.new 
