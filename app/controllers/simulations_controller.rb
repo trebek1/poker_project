@@ -2,11 +2,8 @@ class SimulationsController < ApplicationController
   def index
   	# Data from file removing dashes and making into 10 piece increments so that each one is a "hand" for either player 1 or 2 
     data = File.read("poker.txt").gsub(/\s+/, "").scan(/.{10}/) 
-  	
-    # info about the given hand in the hand_results function
-    #info = Hash.new 
 
-     # object with all info for all hands (for given player) in hand results function   
+    # object with all info for all hands (for given player) in hand results function   
     @eachinfo = Hash.new 
 
     # player 1 and player 2 hands arrays (just the cards from the file)

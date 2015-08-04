@@ -3,6 +3,9 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
  
   	# note that each time the function hand_results runs, we are only looking at one hand, with one index and one player  
+	
+	
+	
 	def hand_results (hand,index,player)
 
 		max=0 # Set the max value to zero in order to help find the high card for the hand 
